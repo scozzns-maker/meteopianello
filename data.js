@@ -1,4 +1,4 @@
-/* Dati di MeteoPianello (previsioni 3B Meteo e allerte Meteoalarm via AccuWeather). Questo file viene riscritto ogni mattina dall'aggiornamento automatico: la pagina (index.html) non va toccata. */
+/* Dati di MeteoPianello (previsioni 3B Meteo e allerte Meteoalarm via AccuWeather). Questo file viene riscritto ogni 6 ore dall'aggiornamento automatico: la pagina (index.html) non va toccata. */
 window.METEO = {
   "updatedAt": "2026-10-30T14:02:00+01:00",
   "sourceNote": "sabato aggiornato alle 13:48, domenica alle 14:02; Ancona sabato alle 7:04",

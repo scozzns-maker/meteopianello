@@ -3,7 +3,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Semi+Condensed:wght@500;600;700&display=swap">
-<meta name="description" content="Meteo del weekend per dieci località delle Marche, mattina e pomeriggio, aggiornato ogni mattina.">
+<meta name="description" content="Meteo del weekend per dieci località delle Marche, mattina e pomeriggio, aggiornato ogni 6 ore.">
 <link rel="icon" href="logo.jpg">
 </head><body>
 <style>
@@ -296,7 +296,7 @@ details.tbl summary{cursor:pointer;width:max-content}
     </div>
   </section>
 
-  <p class="foot">Previsioni di 3B Meteo e allerte Meteoalarm (tramite AccuWeather), aggiornate ogni mattina alle 6:38. Possono cambiare durante il giorno: controlla sempre il bollettino prima di uscire. La mappa è schematica, con la costa disegnata in modo approssimativo.</p>
+  <p class="foot">Previsioni di 3B Meteo e allerte Meteoalarm (tramite AccuWeather), aggiornate ogni 6 ore (alle 0:38, 6:38, 12:38 e 18:38). Possono cambiare tra un aggiornamento e l'altro: controlla sempre il bollettino prima di uscire. La mappa è schematica, con la costa disegnata in modo approssimativo.</p>
 </div>
 <script>document.write('<script src="data.js?v='+Date.now()+'"><\/script>')</script>
 <script>
@@ -405,7 +405,7 @@ details.tbl summary{cursor:pointer;width:max-content}
     $('eyebrow').textContent='Marche · '+(wk.length===2?'weekend '+dm(wk[0])+' – '+dm(wk[1]):wk.length?'domenica '+dm(wk[0]):'weekend');
     var days=wk.filter(function(d){return Object.keys(MP).some(function(n){return MP[n][ymd(d)]})});
     if(!days.length){
-      el.innerHTML='';$('wxmap').innerHTML='';vv.innerHTML='<p class="al">Le previsioni di questo weekend non sono ancora nella pagina: arrivano con il prossimo aggiornamento delle 6:38.</p>';ss.textContent='';return;
+      el.innerHTML='';$('wxmap').innerHTML='';vv.innerHTML='<p class="al">Le previsioni di questo weekend non sono ancora nella pagina: arrivano con il prossimo aggiornamento.</p>';ss.textContent='';return;
     }
     renderMap(days);
     var cls=function(p){return p<=25?['ok','Asciutto']:p<=50?['info','Incerto']:['warn','Pioggia probabile']};
@@ -438,8 +438,9 @@ details.tbl summary{cursor:pointer;width:max-content}
     var sa=WXAT?new Date(WXAT):null,age=sa?(now-sa)/36e5:0;
     ss.textContent=sa?'Fonte: 3B Meteo, previsioni lette '+whenTxt(sa)+(DATA.sourceNote?' ('+DATA.sourceNote+')':'')+'.'+(age>30?' Sono vecchie di oltre un giorno: possono essere cambiate.':''):'';
   }
-  /* Conto alla rovescia: l'attività programmata gira ogni giorno alle 6:38 ora italiana. */
-  var UPD_H=6,UPD_M=38,UPD_LBL='6:38';
+  /* Conto alla rovescia: l'attività programmata gira ogni 6 ore, alle 0:38, 6:38, 12:38 e 18:38 ora italiana. */
+  var RUNS=[[0,38],[6,38],[12,38],[18,38]];
+  function runLbl(x){return x[0]+':'+pad(x[1])}
   function romeParts(d){
     var o={};
     try{new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Rome',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}).formatToParts(d).forEach(function(p){if(p.type!=='literal')o[p.type]=+p.value});}
@@ -456,16 +457,18 @@ details.tbl summary{cursor:pointer;width:max-content}
   }
   function tickUpd(){
     var t=new Date(),r=romeParts(t);
-    var left=UPD_H*3600+UPD_M*60-(r.hour*3600+r.minute*60+r.second),isToday=left>0;
-    if(left<=0)left+=86400;
-    var h=Math.floor(left/3600),m=Math.floor(left%3600/60);
+    var now_s=r.hour*3600+r.minute*60+r.second,secs=RUNS.map(function(x){return x[0]*3600+x[1]*60});
+    var ni=secs.findIndex(function(v){return v>now_s}),nextS=ni<0?secs[0]+86400:secs[ni],nextR=RUNS[ni<0?0:ni];
+    var pi=-1;secs.forEach(function(v,i){if(v<=now_s)pi=i});
+    var prevS=pi<0?secs[secs.length-1]-86400:secs[pi],prevR=RUNS[pi<0?RUNS.length-1:pi];
+    var left=nextS-now_s,h=Math.floor(left/3600),m=Math.floor(left%3600/60);
     $('updIn').textContent='tra '+(h?h+' h '+m+' min':m?m+' min':'meno di un minuto');
-    var lastRun=t.getTime()-(86400-left)*1000,sa=WXAT?new Date(WXAT):null,sub=$('updAt');
-    var next=(isToday?'Oggi':'Domani')+' alle '+UPD_LBL;
+    var lastRun=t.getTime()-(now_s-prevS)*1000,sa=WXAT?new Date(WXAT):null,sub=$('updAt');
+    var next=(nextS<86400?'Oggi':'Domani')+' alle '+runLbl(nextR);
     sub.classList.remove('late');
     if(sa&&sa.getTime()<lastRun-120000){
       sub.classList.add('late');
-      sub.textContent=(t.getTime()-lastRun<45*60000)?'Aggiornamento delle '+UPD_LBL+' in corso: ricarica la pagina tra qualche minuto.':'L\'aggiornamento delle '+UPD_LBL+' non è arrivato: i dati sono di '+whenTxt(sa)+'. Prossimo tentativo: '+next.toLowerCase()+'.';
+      sub.textContent=(t.getTime()-lastRun<45*60000)?'Aggiornamento delle '+runLbl(prevR)+' in corso: ricarica la pagina tra qualche minuto.':'L\'aggiornamento delle '+runLbl(prevR)+' non è arrivato: i dati sono di '+whenTxt(sa)+'. Prossimo: '+next.toLowerCase()+'.';
     }else{
       sub.textContent=next+(sa?' · ultimo '+whenTxt(sa):'');
     }
