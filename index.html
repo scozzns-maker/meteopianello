@@ -435,8 +435,8 @@ details.tbl summary{cursor:pointer;width:max-content}
       out+='<p><b>'+esc(nm)+'.</b> '+esc(txt)+'</p>';
     });
     vv.innerHTML=out;
-    var sa=WXAT?new Date(WXAT):null,age=sa?(now-sa)/36e5:0;
-    ss.textContent=sa?'Fonte: 3B Meteo, previsioni lette '+whenTxt(sa)+(DATA.sourceNote?' ('+DATA.sourceNote+')':'')+'.'+(age>30?' Sono vecchie di oltre un giorno: possono essere cambiate.':''):'';
+    var sa=WXAT?new Date(WXAT):null,fa=DATA.fcAt?new Date(DATA.fcAt):sa,age=fa?(now-fa)/36e5:0;
+    ss.textContent=sa?'Fonte: 3B Meteo, previsione più recente '+whenTxt(fa)+(DATA.sourceNote?' ('+DATA.sourceNote+')':'')+'; controllata '+whenTxt(sa)+'.'+(age>30?' I dati di 3B hanno più di un giorno: possono essere cambiati.':''):'';
   }
   /* Conto alla rovescia: l'attività programmata gira ogni 6 ore, alle 0:38, 6:38, 12:38 e 18:38 ora italiana. */
   var RUNS=[[0,38],[6,38],[12,38],[18,38]];
