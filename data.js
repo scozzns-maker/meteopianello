@@ -1,8 +1,8 @@
 /* Dati di MeteoPianello (previsioni 3B Meteo e allerte Meteoalarm via AccuWeather). Questo file viene riscritto ogni 6 ore dall'aggiornamento automatico: la pagina (index.html) non va toccata. */
 window.METEO = {
-  "updatedAt": "2026-10-31T12:52:00+01:00",
-  "fcAt": "2026-10-31T12:30:00+01:00",
-  "sourceNote": "sabato aggiornato stamattina fino alle 12:30 (Campofilone ieri alle 19:34), domenica con i dati di ieri, Ancona alle 8:13 di oggi; Campofilone domenica n.d.",
+  "updatedAt": "2026-10-31T18:45:00+01:00",
+  "fcAt": "2026-10-31T13:48:00+01:00",
+  "sourceNote": "sabato aggiornato stamattina fino alle 12:30; domenica: Osimo alle 13:48 e Ancona alle 8:13 di oggi, le altre con i dati di ieri; Arcevia e Campofilone con i dati precedenti (pagine non raggiungibili; Campofilone sabato di ieri alle 19:34, domenica n.d.)",
   "forecasts": {
     "Osimo": {
       "2026-10-31": {
@@ -23,18 +23,18 @@ window.METEO = {
       },
       "2026-11-01": {
         "m": {
-          "c": "pioggia e schiarite",
+          "c": "pioggia",
           "t": 9,
           "p": 90,
-          "mm": 4.2,
-          "w": "NNE 8"
+          "mm": 6.7,
+          "w": "NNE 11"
         },
         "a": {
           "c": "pioggia",
           "t": 10,
-          "p": 85,
+          "p": 95,
           "mm": 6.5,
-          "w": "N 9"
+          "w": "NO 9"
         }
       }
     },
