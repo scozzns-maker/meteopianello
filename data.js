@@ -1,8 +1,8 @@
 /* Dati di MeteoPianello (previsioni 3B Meteo e allerte Meteoalarm via AccuWeather). Questo file viene riscritto ogni 6 ore dall'aggiornamento automatico: la pagina (index.html) non va toccata. */
 window.METEO = {
-  "updatedAt": "2026-11-01T00:57:00+01:00",
+  "updatedAt": "2026-11-01T06:51:00+01:00",
   "fcAt": "2026-11-01T00:51:00+01:00",
-  "sourceNote": "domenica: Senigallia e Sirolo aggiornati alle 0:51 di stanotte; Osimo alle 13:48 e Ancona alle 8:13 di ieri; Ostra, Arcevia, Cingoli, Porto Recanati e Recanati con dati di venerdì o precedenti; Campofilone n.d. (pagine non raggiungibili)",
+  "sourceNote": "domenica: Senigallia e Sirolo aggiornati alle 0:51 di stanotte, Ancona alle 8:13 di ieri (ricontrollati); Osimo con i dati delle 13:48 di ieri; Ostra, Arcevia, Cingoli, Porto Recanati e Recanati con dati di venerdì o precedenti; Campofilone n.d. (pagine non raggiungibili)",
   "forecasts": {
     "Osimo": {
       "2026-11-01": {
