@@ -1,8 +1,8 @@
 /* Dati di MeteoPianello (previsioni 3B Meteo e allerte Meteoalarm via AccuWeather). Questo file viene riscritto ogni 6 ore dall'aggiornamento automatico: la pagina (index.html) non va toccata. */
 window.METEO = {
-  "updatedAt": "2026-11-01T06:51:00+01:00",
-  "fcAt": "2026-11-01T00:51:00+01:00",
-  "sourceNote": "domenica: Senigallia e Sirolo aggiornati alle 0:51 di stanotte, Ancona alle 8:13 di ieri (ricontrollati); Osimo con i dati delle 13:48 di ieri; Ostra, Arcevia, Cingoli, Porto Recanati e Recanati con dati di venerdì o precedenti; Campofilone n.d. (pagine non raggiungibili)",
+  "updatedAt": "2026-11-01T12:51:00+01:00",
+  "fcAt": "2026-11-01T12:38:00+01:00",
+  "sourceNote": "domenica: Ostra aggiornato alle 12:38 e Campofilone alle 12:35 di oggi, Senigallia alle 0:51 di stanotte; Osimo con i dati delle 13:48 di ieri, Ancona delle 8:13 di ieri; Sirolo, Arcevia, Cingoli, Porto Recanati e Recanati con i dati già presenti (pagine 3B di oggi non disponibili o ferme a ieri)",
   "forecasts": {
     "Osimo": {
       "2026-11-01": {
@@ -22,21 +22,39 @@ window.METEO = {
         }
       }
     },
+    "Campofilone": {
+      "2026-11-01": {
+        "m": {
+          "c": "nuvoloso",
+          "t": 9,
+          "p": 25,
+          "mm": 0,
+          "w": "ONO 9"
+        },
+        "a": {
+          "c": "pioggia debole",
+          "t": 11,
+          "p": 75,
+          "mm": 0.7,
+          "w": "ONO 7"
+        }
+      }
+    },
     "Ostra": {
       "2026-11-01": {
         "m": {
-          "c": "pioggia e schiarite",
-          "t": 9,
-          "p": 70,
-          "mm": 2.8,
-          "w": "N 12"
+          "c": "nubi sparse",
+          "t": 11,
+          "p": 5,
+          "mm": 0,
+          "w": "NO 5"
         },
         "a": {
-          "c": "rovesci",
-          "t": 10,
-          "p": 80,
-          "mm": 13.2,
-          "w": "NNE 9"
+          "c": "pioggia",
+          "t": 7,
+          "p": 100,
+          "mm": 1.3,
+          "w": "calmo 0"
         }
       }
     },
@@ -171,14 +189,14 @@ window.METEO = {
     {
       "t": "Allerta gialla per temporali",
       "area": "Marche",
-      "s": 1793534400000,
-      "e": 1793577540000,
+      "s": 1793523600000,
+      "e": 1793620740000,
       "fino": "lunedì 2 novembre"
     },
     {
       "t": "Allerta gialla per vento",
       "area": "Marche, zone costiere",
-      "s": 1793534400000,
+      "s": 1793523600000,
       "e": 1793577540000,
       "fino": "lunedì 2 novembre"
     }
