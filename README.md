@@ -2,6 +2,8 @@
 
 Non ci sono scuse. Meteo del weekend (mattina 8–12 e pomeriggio 13–18) per dieci località delle Marche, con mappa, dettaglio per località e allerte.
 
+In cima, **Dove uscire in bici**: per ogni giorno la località e la fascia migliori per un giro in bici da corsa (meno pioggia, strade asciutte, vento debole, temperature più miti), con lo stato stimato delle strade: asciutte, umide o bagnate in base alla pioggia prevista prima e durante l'uscita, più l'avviso di ghiaccio o brina quando le minime scendono vicino a 0 °C.
+
 Pagina: https://scozzns-maker.github.io/meteopianello/
 
 La pagina si aggiorna da sola, senza interventi esterni:
