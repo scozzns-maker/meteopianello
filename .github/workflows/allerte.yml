@@ -1,0 +1,34 @@
+# Legge le allerte Meteoalarm ogni 30 minuti e aggiorna alerts.json (solo se cambiano, o ogni 6 ore).
+name: Allerte Meteoalarm
+on:
+  schedule:
+    - cron: '7,37 * * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/**']
+permissions:
+  contents: write
+concurrency:
+  group: allerte
+  cancel-in-progress: false
+jobs:
+  allerte:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Leggi Meteoalarm
+        env:
+          REGIONS: IT011
+          CAP_DEBUG: ${{ github.event_name != 'schedule' && '1' || '0' }}
+        run: python3 .github/scripts/allerte.py
+      - name: Pubblica se cambiate
+        run: |
+          if [ -z "$(git status --porcelain -- alerts.json)" ]; then echo "Nessuna modifica da pubblicare"; exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add alerts.json
+          git commit -q -m 'Allerte Meteoalarm aggiornate'
+          git pull -q --rebase origin main
+          git push -q
