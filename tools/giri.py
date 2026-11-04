@@ -6,6 +6,7 @@ attivita.json: elenco di attività Ride come le restituisce il connettore Strava
 (search_activities con include_polyline), con name, start_local, location_summary,
 summary.distance/elevation_gain/moving_time e reduced_polyline.
 Il file di ingresso contiene dati personali: non va messo nel repository.
+I titoli delle attività non vengono copiati (servono solo per scartare riscaldamenti e defaticamenti).
 Le tracce in uscita sono semplificate e senza il primo e l'ultimo tratto (1-2 km, a caso).
 """
 import sys
@@ -93,10 +94,6 @@ TOWNS={'Ancona':(43.617,13.517),'Osimo':(43.482,13.488),'San Biagio':(43.455,13.
 'Montecosaro':(43.316,13.635),'Sant\'Elpidio a Mare':(43.230,13.686),'Altidona':(43.107,13.795),'Montegranaro':(43.233,13.632),'Monte Urano':(43.205,13.672)}
 def town(q,exclude=()):
     best=min((hav(q,v),k) for k,v in TOWNS.items() if k not in exclude);return best[1],best[0]
-GENERIC=re.compile(r'^(pedalata|giro) (mattutin[oa]|serale|pomeridian[oa]|dell\'ora di pranzo)$',re.I)
-def isgen(n):
-    t=re.sub(r'[^\w\s\'-]','',n,flags=re.U).strip()
-    return (not t) or bool(GENERIC.match(t)) or len(t)<3
 CELL=0.08
 cellix={};cells=[];out=[]
 for c in clusters:
@@ -115,7 +112,6 @@ for c in clusters:
     loop=hav(p[0],p[-1])<3
     label=(st+' – '+ft) if loop else (st+' → '+town(p[-1],exclude=())[0])
     if not loop and town(p[-1])[0]==st: label=st+' – '+ft
-    names=[x['name'] for x in c if not isgen(x['name'])]
     w=[]
     for f in (0.1,0.3,0.5,0.7,0.9):
         tgt=f*L;i=next(i for i,d in enumerate(cu) if d>=tgt)
@@ -123,7 +119,7 @@ for c in clusters:
         if k not in cellix:cellix[k]=len(cells);cells.append([round(tp[i][0],2),round(tp[i][1],2)])
         if cellix[k] not in w:w.append(cellix[k])
     sp=dp(tp,0.003)
-    out.append({'id':'r'+str(len(out)),'label':label,'strava':names[0] if names else '','km':r['km'],'up':r['up'],'n':len(c),'last':r['date'][:7],
+    out.append({'id':'r'+str(len(out)),'label':label,'km':r['km'],'up':r['up'],'n':len(c),
                 'start':st,'h':round(r['mt']/3600,1),'pts':[[round(x,3),round(y,3)] for x,y in sp],'w':w})
 print(len(out),'routes',len(cells),'weather cells',sum(len(x['pts']) for x in out),'points')
 json.dump({'note':'Giri in bici nelle Marche da Strava: tracce semplificate, senza il primo e l\'ultimo tratto (da 1 a 2 km).','trimKm':[1,2],'cells':cells,'routes':out},open(sys.argv[2],'w'),ensure_ascii=False,separators=(',',':'))
