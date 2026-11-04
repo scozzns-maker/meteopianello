@@ -30,5 +30,11 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add alerts.json
           git commit -q -m 'Allerte Meteoalarm aggiornate'
-          git pull -q --rebase origin main
-          git push -q
+          # GitHub a volte rifiuta il push con un errore temporaneo (500): riprova fino a 3 volte
+          for i in 1 2 3; do
+            if git pull -q --rebase origin main && git push -q; then exit 0; fi
+            echo "Tentativo $i non riuscito, riprovo tra $((i*15)) secondi"
+            sleep $((i*15))
+          done
+          echo "Push non riuscito dopo 3 tentativi"
+          exit 1
