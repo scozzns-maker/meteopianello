@@ -3,7 +3,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Semi+Condensed:wght@500;600;700&display=swap">
-<meta name="description" content="Meteo del weekend per dieci località delle Marche, mattina e pomeriggio, aggiornato a ogni apertura.">
+<meta name="description" content="Meteo del weekend e giri in bici per sedici località delle Marche, mattina e pomeriggio, aggiornato a ogni apertura.">
 <link rel="icon" href="logo.jpg">
 </head><body>
 <style>
@@ -347,7 +347,8 @@ details.tbl summary{cursor:pointer;width:max-content}
     warn:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2l6.2 11H1.8z"/><path d="M8 6.6v3M8 11.6v.1"/></svg>',
     info:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="8" r="6.2"/><path d="M8 7.2v3.6M8 5.1v.1"/></svg>'
   };
-  var PLACES=[{n:'Osimo',la:43.482,lo:13.488},{n:'Campofilone',la:43.082,lo:13.825},{n:'Ostra',la:43.616,lo:13.158},{n:'Arcevia',la:43.5,lo:12.941},{n:'Sirolo',la:43.522,lo:13.615},{n:'Cingoli',la:43.374,lo:13.208},{n:'Senigallia',la:43.713,lo:13.213},{n:'Ancona',la:43.617,lo:13.517},{n:'Porto Recanati',la:43.433,lo:13.659},{n:'Recanati',la:43.403,lo:13.548}];
+  /* da nord a sud: è l'ordine dell'elenco dettagliato */
+  var PLACES=[{n:'Senigallia',la:43.713,lo:13.213},{n:'Ancona',la:43.617,lo:13.517},{n:'Ostra',la:43.616,lo:13.158},{n:'Jesi',la:43.523,lo:13.244},{n:'Sirolo',la:43.522,lo:13.615},{n:'Arcevia',la:43.5,lo:12.941},{n:'Osimo',la:43.482,lo:13.488},{n:'Porto Recanati',la:43.433,lo:13.659},{n:'Recanati',la:43.403,lo:13.548},{n:'Cingoli',la:43.374,lo:13.208},{n:'Civitanova',la:43.307,lo:13.728},{n:'Macerata',la:43.3,lo:13.453},{n:'Porto San Giorgio',la:43.185,lo:13.795},{n:'Campofilone',la:43.082,lo:13.825},{n:'Comunanza',la:42.958,lo:13.413},{n:'San Benedetto',la:42.95,lo:13.883}];
   function ymd(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
   function weekendDates(){
     var d=new Date();d.setHours(0,0,0,0);
@@ -365,7 +366,7 @@ details.tbl summary{cursor:pointer;width:max-content}
   try{var g0=localStorage.getItem('meteopianello-giri');if(g0==='s'||g0==='l')RST.len=g0}catch(e){}
   function saveRST(){try{localStorage.setItem('meteopianello-giri',RST.len)}catch(e){}}
   function cellSig(){return CELLS.map(function(c){return c.la+','+c.lo}).join(';')}
-  var OM='https://api.open-meteo.com/v1/forecast',ICON='italia_meteo_arpae_icon_2i',CACHE_KEY='meteopianello-fc-v3';
+  var OM='https://api.open-meteo.com/v1/forecast',ICON='italia_meteo_arpae_icon_2i',CACHE_KEY='meteopianello-fc-v4';
   var OMV='temperature_2m,precipitation,weather_code,wind_speed_10m,wind_direction_10m';
   var SLOTH={m:[8,9,10,11,12],a:[13,14,15,16,17,18]};
   var WMO={0:'sereno',1:'quasi sereno',2:'nubi sparse',3:'coperto',45:'nebbia',48:'nebbia con brina',51:'pioviggine debole',53:'pioviggine',55:'pioviggine intensa',56:'pioviggine gelata',57:'pioviggine gelata',61:'pioggia debole',63:'pioggia',65:'pioggia forte',66:'pioggia gelata',67:'pioggia gelata',71:'neve debole',73:'neve',75:'neve forte',77:'neve granulare',80:'rovesci deboli',81:'rovesci',82:'rovesci forti',85:'rovesci di neve deboli',86:'rovesci di neve',95:'temporale',96:'temporale con grandine',99:'temporale con grandine'};
@@ -435,7 +436,7 @@ details.tbl summary{cursor:pointer;width:max-content}
     var nc=0;
     return (RP||Promise.resolve()).then(function(){
       nc=CELLS.length;
-      /* se la richiesta con i punti dei giri fallisce, riprovo con le sole dieci località */
+      /* se la richiesta con i punti dei giri fallisce, riprovo con le sole località */
       return get(PLACES.concat(CELLS)).catch(function(e){if(!nc)throw e;nc=0;return get(PLACES)});
     }).then(function(r){
       var mp=build(r[0],r[1],days);
@@ -479,6 +480,7 @@ details.tbl summary{cursor:pointer;width:max-content}
   function dayAlerts(dy){var a=new Date(dy.getFullYear(),dy.getMonth(),dy.getDate()).getTime(),b=a+864e5-1;return ALERTS.filter(function(x){return x.e>=a&&x.s<=b})}
   var MAPST={day:0,slot:'m',sel:null,auto:true};
   var COAST=[[12.5,44.11],[12.6,44.05],[12.66,44.005],[12.742,43.968],[12.757,43.97],[12.785,43.964],[12.82,43.948],[12.86,43.931],[12.905,43.93],[12.961,43.888],[13.029,43.858],[13.077,43.814],[13.136,43.783],[13.219,43.729],[13.275,43.693],[13.314,43.669],[13.403,43.644],[13.46,43.615],[13.505,43.625],[13.532,43.619],[13.599,43.576],[13.635,43.529],[13.638,43.513],[13.671,43.433],[13.734,43.309],[13.769,43.259],[13.807,43.186],[13.849,43.101],[13.869,43.025],[13.879,42.986],[13.894,42.951],[13.906,42.91],[13.93,42.85],[13.95,42.78]];
+  var LEFT=['Osimo','Cingoli','Arcevia','Ostra','Campofilone','Recanati','Macerata','Porto San Giorgio','San Benedetto','Comunanza'];
   function renderMap(days){
     var box=$('wxmap');
     if(!days.length){box.innerHTML='';return}
@@ -491,7 +493,7 @@ details.tbl summary{cursor:pointer;width:max-content}
     var sl=MAPST.slot;
     /* giri della lunghezza scelta: tenui sullo sfondo, con quello consigliato (o scelto) evidenziato; la cornice si allarga per contenerli */
     var vis=ROUTES?ROUTES.routes.filter(lenOK):[],hi=null;
-    var lo0=12.72,lo1=13.929,la0=42.988,la1=43.8;
+    var lo0=12.72,lo1=13.99,la0=42.9,la1=43.8;
     vis.forEach(function(rt){rt.pts.forEach(function(p){lo0=Math.min(lo0,p[1]-0.03);lo1=Math.max(lo1,p[1]+0.03);la0=Math.min(la0,p[0]-0.03);la1=Math.max(la1,p[0]+0.03)})});
     var KX=430,KY=591,W=Math.round((lo1-lo0)*KX+20),H=Math.round((la1-la0)*KY+20),L0=lo0,T0=la1;
     var X=function(lo){return (lo-L0)*KX+10},Y=function(la){return (T0-la)*KY+10};
@@ -507,7 +509,7 @@ details.tbl summary{cursor:pointer;width:max-content}
     var dn=function(d){var s=d.toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'short'});return s.charAt(0).toUpperCase()+s.slice(1)};
     var svg='<svg class="mapsvg" viewBox="0 0 '+W+' '+H+'" role="group" aria-label="Mappa della pioggia prevista nelle Marche">'+
       '<polygon class="sea" points="'+sea+'"/><polyline class="coast" points="'+coast+'"/>'+
-      '<text class="seat" x="'+(W-8)+'" y="'+(Y(43.3)).toFixed(0)+'" text-anchor="end">Adriatico</text>';
+      '<text class="seat" x="'+(W-8)+'" y="'+(Y(43.76)).toFixed(0)+'" text-anchor="end">Adriatico</text>';
     if(vis.length){
       var pl=function(rt){return rt.pts.map(function(p){return X(p[1]).toFixed(1)+','+Y(p[0]).toFixed(1)}).join(' ')};
       svg+='<g aria-hidden="true">'+vis.filter(function(rt){return !hi||rt.id!==hi.rt.id}).map(function(rt){return '<polyline class="rtl" points="'+pl(rt)+'"/>'}).join('');
@@ -516,7 +518,7 @@ details.tbl summary{cursor:pointer;width:max-content}
     }
     PLACES.forEach(function(pl){
       var x=MP[pl.n]&&MP[pl.n][key],q=x?x[sl]:null,cx=X(pl.lo),cy=Y(pl.la);
-      var side=(pl.n==='Osimo'||pl.n==='Cingoli'||pl.n==='Arcevia'||pl.n==='Ostra'||pl.n==='Campofilone'||pl.n==='Recanati')?'l':'r';
+      var side=LEFT.indexOf(pl.n)>=0?'l':'r';
       var r=q?14+Math.min(q.mm,13)/13*8:14,t=q?tone(q.p):null;
       var lab=q?pl.n+', '+(sl==='m'?'mattina':'pomeriggio')+': pioggia '+q.p+'%':pl.n+': dato non disponibile';
       svg+='<g class="pt'+(MAPST.sel===pl.n?' sel':'')+'" tabindex="0" role="button" aria-label="'+esc(lab)+'" data-n="'+esc(pl.n)+'"><circle class="th" cx="'+cx.toFixed(1)+'" cy="'+cy.toFixed(1)+'" r="26" fill="transparent"/>'+

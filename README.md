@@ -1,11 +1,11 @@
 # MeteoPianello
 
-Non ci sono scuse. Meteo del weekend (mattina 8–12 e pomeriggio 13–18) per dieci località delle Marche, con mappa, dettaglio per località e allerte.
+Non ci sono scuse. Meteo del weekend (mattina 8–12 e pomeriggio 13–18) per sedici località delle Marche, da Senigallia a San Benedetto, con mappa, dettaglio per località e allerte.
 
 La pagina ha due parti:
 
 - **Che giro fare**: per ogni giorno del weekend, il giro (tra quelli fatti nelle Marche, da Strava) con il meteo migliore lungo tutto il percorso, con la scelta tra giri sotto i 50 km e da 50 km in su. Per ogni giro conta il punto del percorso con il meteo peggiore (pioggia, strade asciutte/umide/bagnate, ghiaccio, vento, freddo); al pomeriggio la pagina controlla anche se si rientra prima del tramonto. Se i giri non si caricano, consiglia la località migliore.
-- **Mappa**: probabilità di pioggia e vento nelle dieci località, con il giro consigliato evidenziato per il giorno e la fascia scelti. Le previsioni complete per località sono in fondo, a scomparsa.
+- **Mappa**: probabilità di pioggia e vento nelle sedici località, con il giro consigliato evidenziato per il giorno e la fascia scelti. Le previsioni complete per località sono in fondo, a scomparsa.
 
 Pagina: https://scozzns-maker.github.io/meteopianello/
 
