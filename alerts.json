@@ -5,7 +5,7 @@
   "IT011"
  ],
  "latestSent": "2026-11-10T10:11:32Z",
- "checkedAt": "2026-11-10T16:55:41Z",
+ "checkedAt": "2026-11-10T23:39:40Z",
  "alerts": [
   {
    "id": "2.49.0.0.380.3.IT.261110111132.029",
@@ -23,6 +23,23 @@
     "Marche"
    ],
    "zone": "SETTORE NORD"
+  },
+  {
+   "id": "2.49.0.0.380.3.IT.261110111132.063",
+   "geo": "IT011",
+   "region": "Marche",
+   "event": "Orange Wind Warning",
+   "severity": "Severe",
+   "onset": "2026-11-12T12:00:00Z",
+   "expires": "2026-11-12T22:59:00Z",
+   "sent": "2026-11-10T10:11:32Z",
+   "desc": "Sono previsti fenomeni meteorologici intensi APPENNINO E COSTE (DISCLAIMER: \"Le informazioni fornite su METEOALARM per l'Italia riguardano esclusivamente l'intensità e la ricorrenza dei fenomeni, maggiori dettagli sono disponibili su www.meteoam.it. Le informazioni METEOALARM non forniscono la valutazione di impatto sul territorio e non rappresentano i messaggi di Allerta Ufficiali che vengono emessi dal Servizio Nazionale di Protezione Civile https://www.protezionecivile.gov.it\")",
+   "descEn": "Severe weather expected APENNINES AND COASTS (DISCLAIMER: \"Information provided on METEOALARM for Italy regard only the intensity and recurrence of the phenomena, further details can be found at www.meteoam.it. METEOALARM information do not provide the assessment of impact on the territory and they do not represent the Official Alerts messages that are issued by the National Civil Protection Service https://www.protezionecivile.gov.it\")",
+   "headline": "Allerta Vento Arancione per l'Italia - Marche",
+   "areas": [
+    "Marche"
+   ],
+   "zone": "APPENNINO E COSTE"
   }
  ]
 }
