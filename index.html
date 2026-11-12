@@ -118,8 +118,11 @@ h2{font-size:18px;font-weight:800;letter-spacing:-.01em}
 .mapsvg{width:100%;height:auto;display:block;border-radius:16px;background:var(--surface2)}
 .mapsvg .sea{fill:var(--sea)}
 .mapsvg .coast{fill:none;stroke:var(--coast);stroke-width:1.5}
-.mapsvg .seat{fill:var(--muted);font-size:13px;font-style:italic;letter-spacing:.12em}
-.mapsvg .sunt{fill:var(--ink);font-size:13px;font-weight:700}
+.mapsvg .sunb{fill:var(--surface);stroke:var(--hair);stroke-width:1;filter:drop-shadow(0 2px 6px rgba(0,0,0,.12))}
+.mapsvg .suni{fill:none;stroke:var(--sun);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.mapsvg .sund{fill:var(--sun)}
+.mapsvg .sunl{fill:var(--ink2);font-size:14px;font-weight:600}
+.mapsvg .sunv{fill:var(--ink);font-size:16px;font-weight:800;font-variant-numeric:tabular-nums}
 .mapsvg .rtl{fill:none;stroke:var(--ink2);stroke-opacity:.15;stroke-width:1.4;stroke-linejoin:round;stroke-linecap:round}
 .mapsvg .rtc{fill:none;stroke:var(--surface2);stroke-width:9;stroke-linejoin:round;stroke-linecap:round}
 .mapsvg .rth{fill:none;stroke:var(--accent);stroke-width:4.5;stroke-linejoin:round;stroke-linecap:round}
@@ -160,7 +163,6 @@ details.card[open]>summary::after{transform:rotate(225deg);margin-bottom:-4px}
   .seg{display:flex}.seg button{flex:1;padding:10px 8px}
   .mapsvg .lbl{font-size:16px;stroke-width:4.5px}
   .mapsvg .sub{font-size:14px;stroke-width:4px}
-  .mapsvg .seat,.mapsvg .sunt{font-size:16px}
   .day .go{align-self:stretch;padding:12px}
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
@@ -362,6 +364,12 @@ details.card[open]>summary::after{transform:rotate(225deg);margin-bottom:-4px}
   var LEFT=['Pesaro','Jesi','Osimo','Cingoli','Arcevia','Ostra','Campofilone','Recanati','Macerata','Porto San Giorgio','San Benedetto','Comunanza','Fabriano','Tolentino'];
   function dayLong(d){return capz(d.toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long'}))}
   function slotTxt(l,q){return wxIcon(q.c,22)+'<b>'+l+'</b> '+esc(q.c)+', '+q.t+' °C, pioggia '+q.p+'%'+(q.mm>0?' ('+fmt(q.mm,1)+' mm)':'')+', vento '+windTxt(q.w)+(q.road?', '+roadShort(q):'')}
+  /* riquadro con alba e tramonto, in alto a destra sul mare */
+  function sunBox(x,y,dy){
+    var row=function(yy,rise){return '<g transform="translate(12,'+yy+')"><g class="suni"><path d="M2 19h20M5.2 13.2l1.6 1.2M18.8 13.2l-1.6 1.2"/><path class="sund" d="M7 19a5 5 0 0 1 10 0z"/><path d="'+(rise?'M12 10V3.5M9.2 6.2L12 3.5l2.8 2.7':'M12 3.5V10M9.2 7.3L12 10l2.8-2.7')+'"/></g>'+
+      '<text class="sunl" x="32" y="17">'+(rise?'Alba':'Tramonto')+'</text><text class="sunv" x="164" y="17" text-anchor="end">'+hmTxt(sunH(dy,rise))+'</text></g>'};
+    return '<g transform="translate('+x+','+y+')" aria-label="Alba '+hmTxt(sunH(dy,true))+', tramonto '+hmTxt(sunH(dy,false))+'"><rect class="sunb" width="178" height="66" rx="16"/>'+row(7,true)+row(35,false)+'</g>';
+  }
   function renderMap(days){
     var box=$('wxmap');
     if(!days.length){box.innerHTML='';return}
@@ -384,9 +392,7 @@ details.card[open]>summary::after{transform:rotate(225deg);margin-bottom:-4px}
     }
     var coast=COAST.map(function(c){return X(c[0]).toFixed(1)+','+Y(c[1]).toFixed(1)}).join(' ');
     var svg='<svg class="mapsvg" viewBox="0 0 '+W+' '+H+'" role="group" aria-label="Mappa del meteo previsto nelle Marche">'+
-      '<polygon class="sea" points="'+coast+' '+(W+10)+','+(H+10)+' '+(W+10)+',-10"/><polyline class="coast" points="'+coast+'"/>'+
-      '<text class="seat" x="'+(W-10)+'" y="'+Y(43.8).toFixed(0)+'" text-anchor="end">Adriatico</text>'+
-      '<text class="sunt" x="'+(W-10)+'" y="'+(Y(43.8)+24).toFixed(0)+'" text-anchor="end">Alba '+hmTxt(sunH(dy,true))+'</text><text class="sunt" x="'+(W-10)+'" y="'+(Y(43.8)+42).toFixed(0)+'" text-anchor="end">Tramonto '+hmTxt(sunH(dy,false))+'</text>';
+      '<polygon class="sea" points="'+coast+' '+(W+10)+','+(H+10)+' '+(W+10)+',-10"/><polyline class="coast" points="'+coast+'"/>'+sunBox(W-190,12,dy);
     if(vis.length){
       var pl=function(rt){return rt.pts.map(function(p){return X(p[1]).toFixed(1)+','+Y(p[0]).toFixed(1)}).join(' ')};
       svg+='<g aria-hidden="true">'+vis.filter(function(rt){return !hi||rt.id!==hi.rt.id}).map(function(rt){return '<polyline class="rtl" points="'+pl(rt)+'"/>'}).join('');
