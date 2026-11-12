@@ -113,7 +113,8 @@ for c in clusters:
     label=(st+' – '+ft) if loop else (st+' → '+town(p[-1],exclude=())[0])
     if not loop and town(p[-1])[0]==st: label=st+' – '+ft
     w=[]
-    for f in (0.1,0.3,0.5,0.7,0.9):
+    nw=max(4,round(L/10))  # un punto meteo ogni 10 km circa
+    for f in [(j+0.5)/nw for j in range(nw)]:
         tgt=f*L;i=next(i for i,d in enumerate(cu) if d>=tgt)
         k=(round(tp[i][0]/CELL),round(tp[i][1]/CELL))
         if k not in cellix:cellix[k]=len(cells);cells.append([round(tp[i][0],2),round(tp[i][1],2)])
