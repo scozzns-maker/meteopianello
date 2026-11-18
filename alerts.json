@@ -5,7 +5,7 @@
   "IT011"
  ],
  "latestSent": "2026-11-18T10:37:05Z",
- "checkedAt": "2026-11-18T17:58:22Z",
+ "checkedAt": "2026-11-18T23:53:50Z",
  "alerts": [
   {
    "id": "2.49.0.0.380.3.IT.261118113703.082",
@@ -53,6 +53,23 @@
    "desc": "Sono previsti fenomeni meteorologici di moderata intensità (DISCLAIMER: \"Le informazioni fornite su METEOALARM per l'Italia riguardano esclusivamente l'intensità e la ricorrenza dei fenomeni, maggiori dettagli sono disponibili su www.meteoam.it. Le informazioni METEOALARM non forniscono la valutazione di impatto sul territorio e non rappresentano i messaggi di Allerta Ufficiali che vengono emessi dal Servizio Nazionale di Protezione Civile https://www.protezionecivile.gov.it\")",
    "descEn": "Moderate intensity weather phenomena expected (DISCLAIMER: \"Information provided on METEOALARM for Italy regard only the intensity and recurrence of the phenomena, further details can be found at www.meteoam.it. METEOALARM information do not provide the assessment of impact on the territory and they do not represent the Official Alerts messages that are issued by the National Civil Protection Service https://www.protezionecivile.gov.it\")",
    "headline": "Allerta Temporali Giallo per l'Italia - Marche",
+   "areas": [
+    "Marche"
+   ],
+   "zone": ""
+  },
+  {
+   "id": "2.49.0.0.380.3.IT.261118113703.143",
+   "geo": "IT011",
+   "region": "Marche",
+   "event": "Yellow Wind Warning",
+   "severity": "Moderate",
+   "onset": "2026-11-20T01:00:00Z",
+   "expires": "2026-11-20T22:59:00Z",
+   "sent": "2026-11-18T10:37:05Z",
+   "desc": "Sono previsti fenomeni meteorologici di moderata intensità appennino. (DISCLAIMER: \"Le informazioni fornite su METEOALARM per l'Italia riguardano esclusivamente l'intensità e la ricorrenza dei fenomeni, maggiori dettagli sono disponibili su www.meteoam.it. Le informazioni METEOALARM non forniscono la valutazione di impatto sul territorio e non rappresentano i messaggi di Allerta Ufficiali che vengono emessi dal Servizio Nazionale di Protezione Civile https://www.protezionecivile.gov.it\")",
+   "descEn": "Moderate intensity weather phenomena expected (DISCLAIMER: \"Information provided on METEOALARM for Italy regard only the intensity and recurrence of the phenomena, further details can be found at www.meteoam.it. METEOALARM information do not provide the assessment of impact on the territory and they do not represent the Official Alerts messages that are issued by the National Civil Protection Service https://www.protezionecivile.gov.it\")",
+   "headline": "Allerta Vento Giallo per l'Italia - Marche",
    "areas": [
     "Marche"
    ],
