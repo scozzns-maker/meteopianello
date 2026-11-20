@@ -4,42 +4,59 @@
  "regions": [
   "IT011"
  ],
- "latestSent": "2026-11-19T10:05:57Z",
- "checkedAt": "2026-11-20T06:10:07Z",
+ "latestSent": "2026-11-20T10:23:28Z",
+ "checkedAt": "2026-11-20T11:31:41Z",
  "alerts": [
   {
-   "id": "2.49.0.0.380.3.IT.261119110556.098",
+   "id": "2.49.0.0.380.3.IT.261120112327.037",
    "geo": "IT011",
    "region": "Marche",
    "event": "Orange Wind Warning",
    "severity": "Severe",
-   "onset": "2026-11-19T09:00:00Z",
+   "onset": "2026-11-20T09:00:00Z",
    "expires": "2026-11-20T17:59:00Z",
-   "sent": "2026-11-19T10:05:56Z",
-   "desc": "Sono previsti fenomeni meteorologici intensi appennino. (DISCLAIMER: \"Le informazioni fornite su METEOALARM per l'Italia riguardano esclusivamente l'intensità e la ricorrenza dei fenomeni, maggiori dettagli sono disponibili su www.meteoam.it. Le informazioni METEOALARM non forniscono la valutazione di impatto sul territorio e non rappresentano i messaggi di Allerta Ufficiali che vengono emessi dal Servizio Nazionale di Protezione Civile https://www.protezionecivile.gov.it\")",
-   "descEn": "Severe weather expected apennines. (DISCLAIMER: \"Information provided on METEOALARM for Italy regard only the intensity and recurrence of the phenomena, further details can be found at www.meteoam.it. METEOALARM information do not provide the assessment of impact on the territory and they do not represent the Official Alerts messages that are issued by the National Civil Protection Service https://www.protezionecivile.gov.it\")",
+   "sent": "2026-11-20T10:23:27Z",
+   "desc": "Sono previsti fenomeni meteorologici intensi APPENNINO (DISCLAIMER: \"Le informazioni fornite su METEOALARM per l'Italia riguardano esclusivamente l'intensità e la ricorrenza dei fenomeni, maggiori dettagli sono disponibili su www.meteoam.it. Le informazioni METEOALARM non forniscono la valutazione di impatto sul territorio e non rappresentano i messaggi di Allerta Ufficiali che vengono emessi dal Servizio Nazionale di Protezione Civile https://www.protezionecivile.gov.it\")",
+   "descEn": "Severe weather expected APPENNINES (DISCLAIMER: \"Information provided on METEOALARM for Italy regard only the intensity and recurrence of the phenomena, further details can be found at www.meteoam.it. METEOALARM information do not provide the assessment of impact on the territory and they do not represent the Official Alerts messages that are issued by the National Civil Protection Service https://www.protezionecivile.gov.it\")",
    "headline": "Allerta Vento Arancione per l'Italia - Marche",
    "areas": [
     "Marche"
    ],
-   "zone": ""
+   "zone": "APPENNINO"
   },
   {
-   "id": "2.49.0.0.380.3.IT.261119110556.099",
+   "id": "2.49.0.0.380.3.IT.261120112327.038",
    "geo": "IT011",
    "region": "Marche",
    "event": "Yellow Wind Warning",
    "severity": "Moderate",
-   "onset": "2026-11-20T18:00:00Z",
-   "expires": "2026-11-21T11:59:00Z",
-   "sent": "2026-11-19T10:05:56Z",
-   "desc": "Sono previsti fenomeni meteorologici di moderata intensità appennino. (DISCLAIMER: \"Le informazioni fornite su METEOALARM per l'Italia riguardano esclusivamente l'intensità e la ricorrenza dei fenomeni, maggiori dettagli sono disponibili su www.meteoam.it. Le informazioni METEOALARM non forniscono la valutazione di impatto sul territorio e non rappresentano i messaggi di Allerta Ufficiali che vengono emessi dal Servizio Nazionale di Protezione Civile https://www.protezionecivile.gov.it\")",
-   "descEn": "Moderate intensity weather phenomena expected apennines. (DISCLAIMER: \"Information provided on METEOALARM for Italy regard only the intensity and recurrence of the phenomena, further details can be found at www.meteoam.it. METEOALARM information do not provide the assessment of impact on the territory and they do not represent the Official Alerts messages that are issued by the National Civil Protection Service https://www.protezionecivile.gov.it\")",
+   "onset": "2026-11-20T12:00:00Z",
+   "expires": "2026-11-21T17:59:00Z",
+   "sent": "2026-11-20T10:23:27Z",
+   "desc": "Sono previsti fenomeni meteorologici di moderata intensità APPENNINO (DISCLAIMER: \"Le informazioni fornite su METEOALARM per l'Italia riguardano esclusivamente l'intensità e la ricorrenza dei fenomeni, maggiori dettagli sono disponibili su www.meteoam.it. Le informazioni METEOALARM non forniscono la valutazione di impatto sul territorio e non rappresentano i messaggi di Allerta Ufficiali che vengono emessi dal Servizio Nazionale di Protezione Civile https://www.protezionecivile.gov.it\")",
+   "descEn": "Moderate intensity weather phenomena expected APPENNINES (DISCLAIMER: \"Information provided on METEOALARM for Italy regard only the intensity and recurrence of the phenomena, further details can be found at www.meteoam.it. METEOALARM information do not provide the assessment of impact on the territory and they do not represent the Official Alerts messages that are issued by the National Civil Protection Service https://www.protezionecivile.gov.it\")",
    "headline": "Allerta Vento Giallo per l'Italia - Marche",
    "areas": [
     "Marche"
    ],
-   "zone": ""
+   "zone": "APPENNINO"
+  },
+  {
+   "id": "2.49.0.0.380.3.IT.261120112327.051",
+   "geo": "IT011",
+   "region": "Marche",
+   "event": "Yellow Wind Warning",
+   "severity": "Moderate",
+   "onset": "2026-11-21T00:00:00Z",
+   "expires": "2026-11-22T11:59:00Z",
+   "sent": "2026-11-20T10:23:28Z",
+   "desc": "Sono previsti fenomeni meteorologici di moderata intensità APPENNINO (DISCLAIMER: \"Le informazioni fornite su METEOALARM per l'Italia riguardano esclusivamente l'intensità e la ricorrenza dei fenomeni, maggiori dettagli sono disponibili su www.meteoam.it. Le informazioni METEOALARM non forniscono la valutazione di impatto sul territorio e non rappresentano i messaggi di Allerta Ufficiali che vengono emessi dal Servizio Nazionale di Protezione Civile https://www.protezionecivile.gov.it\")",
+   "descEn": "Moderate intensity weather phenomena expected APPENNINES (DISCLAIMER: \"Information provided on METEOALARM for Italy regard only the intensity and recurrence of the phenomena, further details can be found at www.meteoam.it. METEOALARM information do not provide the assessment of impact on the territory and they do not represent the Official Alerts messages that are issued by the National Civil Protection Service https://www.protezionecivile.gov.it\")",
+   "headline": "Allerta Vento Giallo per l'Italia - Marche",
+   "areas": [
+    "Marche"
+   ],
+   "zone": "APPENNINO"
   }
  ]
 }
