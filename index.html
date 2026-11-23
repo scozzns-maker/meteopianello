@@ -116,11 +116,12 @@ h2{font-size:18px;font-weight:800;letter-spacing:-.01em}
 .radar{position:relative;width:100%;max-width:760px;margin:0 auto;touch-action:pan-y;border-radius:16px;overflow:hidden;background:var(--land);isolation:isolate;-webkit-user-select:none;user-select:none}
 .radar>*{position:absolute}
 .radar.zoomed{touch-action:none;cursor:grab}
-.rzb{left:10px;bottom:10px;display:flex;gap:6px;z-index:3}
+.rzb{left:10px;bottom:10px;display:flex;gap:6px}
 .rzb button{min-width:38px;height:38px;padding:0 10px;border:1px solid var(--hair);border-radius:12px;background:var(--glass);color:var(--ink);font-size:20px;font-weight:700;line-height:1;box-shadow:0 2px 8px rgba(0,0,0,.2)}
 .rzb .rzall{font-size:13px;display:none}
 .radar.zoomed .rzb .rzall{display:block}
-.rbase,.rtiles,.rcv,.rroute,.rpts{inset:0;width:100%;height:100%}
+.rbase,.rtiles,.rcv,.rroute,.rpts,.rmini{inset:0;width:100%;height:100%}
+.rbase{z-index:0}.rtiles{z-index:1}#rrain{z-index:2}.rroute{z-index:3}#rwind{z-index:4}.rmini{z-index:5}.rpts{z-index:6}.rsun{z-index:7}.rzb{z-index:8}#rpop{z-index:9}
 .rbase .land{fill:var(--land)}.rbase .sea{fill:var(--sea)}.rbase .coast{fill:none;stroke:var(--coast);stroke-width:1.5}
 .rtiles img{position:absolute;max-width:none;pointer-events:none;filter:brightness(.88) saturate(.9)}
 .rtiles img{opacity:0;transition:opacity .25s}.rtiles img.ok{opacity:1}.rtiles img.err{display:none}
@@ -134,6 +135,11 @@ h2{font-size:18px;font-weight:800;letter-spacing:-.01em}
 .rroute .rtc{fill:none;stroke:var(--halo);stroke-width:8;stroke-linejoin:round;stroke-linecap:round}
 .rroute .rth{fill:none;stroke:var(--accent);stroke-width:4;stroke-linejoin:round;stroke-linecap:round}
 .rpts{pointer-events:none}
+.rmini{pointer-events:none}
+.rm{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:1px}
+.rm .wi{width:22px;height:22px;padding:2px;border-radius:50%;background:var(--glass);box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.rm small{font-size:10.5px;font-weight:800;color:#fff;text-shadow:0 0 3px rgba(0,0,0,.85),0 0 5px rgba(0,0,0,.7);line-height:1}
+.radar.notiles .rm small{color:var(--ink);text-shadow:0 0 3px var(--halo),0 0 5px var(--halo)}
 .rpt{position:absolute;display:flex;align-items:center;gap:4px;padding:0;border:0;background:none;color:var(--ink);transform:translate(-13px,-13px);pointer-events:auto;-webkit-tap-highlight-color:transparent;white-space:nowrap}
 .rpt.l{flex-direction:row-reverse;transform:translate(calc(-100% + 13px),-13px);text-align:right}
 .rdot{width:26px;height:26px;border-radius:50%;background:var(--surface);box-shadow:0 1px 4px rgba(0,0,0,.28);display:grid;place-items:center;flex:none}
@@ -534,7 +540,23 @@ details.card[open]>summary::after{transform:rotate(225deg);margin-bottom:-4px}
     if(!RAD.dom)return;var v=RAD.v,vb=v.x.toFixed(2)+' '+v.y.toFixed(2)+' '+v.w.toFixed(2)+' '+vhh().toFixed(2);
     $('rbase').setAttribute('viewBox',vb);$('rroute').setAttribute('viewBox',vb);
     $('radar').classList.toggle('zoomed',zf()>1.01);
-    placeTiles();posPts();drawRain();if(reset)initParticles();if(!RMOT)drawArrows();
+    placeTiles();posPts();renderMini();drawRain();if(reset)initParticles();if(!RMOT)drawArrows();
+  }
+  /* con la mappa ingrandita: icona e temperatura anche nei punti di previsione tra le località (lungo i giri e sulla griglia) */
+  function renderMini(){
+    var box=$('rmini');if(!box)return;
+    var fr=RAD.frames[Math.max(0,Math.min(RAD.frames.length-1,Math.floor(RAD.t+1e-6)))];
+    if(!fr||zf()<2||!RAD.cssW){box.innerHTML='';return}
+    var v=RAD.v,h=vhh(),sx=RAD.cssW/v.w,taken=[],out='',gap=46;
+    var scr=function(p){return [(PX(p.lo)-v.x)*sx,(PY(p.la)-v.y)*sx]};
+    PLACES.forEach(function(p){taken.push(scr(p))});
+    for(var i=PLACES.length;i<SPTS.length;i++){
+      var c=scr(SPTS[i]);if(c[0]<14||c[1]<14||c[0]>RAD.cssW-14||c[1]>RAD.cssH-14)continue;
+      if(taken.some(function(t){return Math.abs(t[0]-c[0])<gap&&Math.abs(t[1]-c[1])<gap*0.8}))continue;
+      var q=ptNow(i,fr);if(!q)continue;taken.push(c);
+      out+='<span class="rm" style="left:'+pc(c[0]/RAD.cssW)+';top:'+pc(c[1]/RAD.cssH)+'">'+wxIcon(q.c,18,null,null,fr.night)+'<small>'+q.t+'°</small></span>';
+    }
+    box.innerHTML=out;
   }
   function posPts(){var v=RAD.v,h=vhh();$('rpts').querySelectorAll('.rpt').forEach(function(b){b.style.left=pc((+b.getAttribute('data-lx')-v.x)/v.w);b.style.top=pc((+b.getAttribute('data-ly')-v.y)/h)})}
   function drawRain(){
@@ -642,6 +664,7 @@ details.card[open]>summary::after{transform:rotate(225deg);margin-bottom:-4px}
         '<canvas class="rcv" id="rrain" aria-hidden="true"></canvas>'+
         '<svg class="rroute" id="rroute" viewBox="0 0 '+GEO.W+' '+GEO.H+'" preserveAspectRatio="none" aria-hidden="true"></svg>'+
         '<canvas class="rcv" id="rwind" aria-hidden="true"></canvas>'+
+        '<div class="rmini" id="rmini" aria-hidden="true"></div>'+
         '<div class="rpts" id="rpts"></div>'+
         '<div class="rsun" id="rsun"></div>'+
         '<div class="rzb"><button type="button" data-z="in" aria-label="Ingrandisci la mappa">+</button><button type="button" data-z="out" aria-label="Rimpicciolisci la mappa">−</button><button type="button" data-z="all" class="rzall" aria-label="Mostra tutte le Marche">Tutto</button></div>'+
@@ -747,6 +770,7 @@ details.card[open]>summary::after{transform:rotate(225deg);margin-bottom:-4px}
     if(!RAD.dom||!RAD.frames.length)return;
     var f=Math.max(0,Math.min(RAD.frames.length-1,Math.floor(RAD.t+1e-6))),fr=RAD.frames[f],dy=fr.dy,b=dayBest(dy);
     if(f===RAD.fi&&!force)return;
+    renderMini();
     var dayChanged=fr.di!==RAD.di;RAD.fi=f;RAD.di=fr.di;
     var inWin=b&&fr.h>=b.s&&fr.h<b.e;
     $('rtime').innerHTML='<b>'+esc(capz(dy.toLocaleDateString('it-IT',{weekday:'long'})))+'</b><span class="rh">'+fr.h+':00</span>'+(inWin?'<span class="rbest">orario consigliato</span>':'');
