@@ -7,7 +7,7 @@ attivita.json: elenco di attività Ride come le restituisce il connettore Strava
 summary.distance/elevation_gain/moving_time e reduced_polyline.
 Il file di ingresso contiene dati personali: non va messo nel repository.
 I titoli delle attività non vengono copiati (servono solo per scartare riscaldamenti e defaticamenti).
-Le tracce in uscita sono semplificate e senza il primo e l'ultimo tratto (1-2 km, a caso).
+Le tracce in uscita sono quasi complete (si tolgono solo i punti allineati, entro una decina di metri) e senza il primo e l'ultimo km.
 """
 import sys
 import json, math, re, random
@@ -32,6 +32,26 @@ def cum(p):
     c=[0.0]
     for i in range(1,len(p)):c.append(c[-1]+hav(p[i-1],p[i]))
     return c
+TRIM=1.0
+npts=0
+def at(p,c,d):
+    # punto a distanza d (km) lungo la traccia
+    for i in range(1,len(p)):
+        if c[i]>=d:
+            f=(d-c[i-1])/((c[i]-c[i-1]) or 1);return (p[i-1][0]+(p[i][0]-p[i-1][0])*f,p[i-1][1]+(p[i][1]-p[i-1][1])*f)
+    return p[-1]
+def enc(pts):
+    # polilinea codificata alla Google, 5 decimali
+    global npts;npts+=len(pts)
+    out=[];pa=pb=0
+    for la,lo in pts:
+        a,b=int(round(la*1e5)),int(round(lo*1e5))
+        for v in (a-pa,b-pb):
+            v=~(v<<1) if v<0 else v<<1
+            while v>=0x20:out.append(chr((0x20|(v&0x1f))+63));v>>=5
+            out.append(chr(v+63))
+        pa,pb=a,b
+    return ''.join(out)
 def trim(p,km=1.0):
     c=cum(p);L=c[-1]
     return [q for q,d in zip(p,c) if km<=d<=L-km]
@@ -100,10 +120,9 @@ for c in clusters:
     c=[r for r in c if not re.search(r'warm ?up|cool ?down',r['name'],re.I)]
     if not c:continue
     r=c[0];p=[tuple(x) for x in r['p']]
-    rnd=random.Random(len(out)*7919+int(r['km']*10))
-    tp=trim(p,0)
-    c0=cum(p);L0=c0[-1];a=1.0+rnd.random();b=1.0+rnd.random()
-    tp=[q for q,d in zip(p,c0) if a<=d<=L0-b]
+    # privacy: tolgo esattamente il primo e l'ultimo km (con un punto interpolato a 1 km da ciascun capo)
+    c0=cum(p);L0=c0[-1];a=b=TRIM
+    tp=[at(p,c0,a)]+[q for q,d in zip(p,c0) if a<d<L0-b]+[at(p,c0,L0-b)]
     if len(tp)<5:continue
     cu=cum(tp);L=cu[-1]
     start=p[0];far=max(p,key=lambda q:hav(start,q))
@@ -119,9 +138,9 @@ for c in clusters:
         k=(round(tp[i][0]/CELL),round(tp[i][1]/CELL))
         if k not in cellix:cellix[k]=len(cells);cells.append([round(tp[i][0],2),round(tp[i][1],2)])
         if cellix[k] not in w:w.append(cellix[k])
-    sp=dp(tp,0.003)
+    sp=dp(tp,0.00012)
     out.append({'id':'r'+str(len(out)),'label':label,'km':r['km'],'up':r['up'],'n':len(c),
-                'start':st,'h':round(r['mt']/3600,1),'pts':[[round(x,3),round(y,3)] for x,y in sp],'w':w})
-print(len(out),'routes',len(cells),'weather cells',sum(len(x['pts']) for x in out),'points')
-json.dump({'note':'Giri in bici nelle Marche da Strava: tracce semplificate, senza il primo e l\'ultimo tratto (da 1 a 2 km).','trimKm':[1,2],'cells':cells,'routes':out},open(sys.argv[2],'w'),ensure_ascii=False,separators=(',',':'))
+                'start':st,'h':round(r['mt']/3600,1),'line':enc(sp),'w':w})
+print(len(out),'routes',len(cells),'weather cells',npts,'points')
+json.dump({'note':'Giri in bici nelle Marche da Strava: tracce senza il primo e l\'ultimo km; line = polilinea codificata (precisione 1e-5).','trimKm':TRIM,'cells':cells,'routes':out},open(sys.argv[2],'w'),ensure_ascii=False,separators=(',',':'))
 import os;print(os.path.getsize(sys.argv[2]),'bytes')

@@ -250,7 +250,7 @@ details.card[open]>summary::after{transform:rotate(225deg);margin-bottom:-4px}
     <p class="wxs" id="wxs"></p>
   </details>
 
-  <p class="foot">Previsioni: <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a> (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>), lette a ogni apertura. Allerte: <a href="https://www.meteoalarm.org" target="_blank" rel="noopener">Meteoalarm</a> (Aeronautica Militare), non sono gli avvisi della Protezione Civile. Giri: le tue attività Strava nelle Marche, semplificate e senza il primo e l'ultimo tratto. Il consiglio sceglie da solo orario e giro: per ogni giro il meteo è letto ogni 10 km circa, ora per ora, e conta il punto peggiore; il rientro deve essere prima del tramonto. Lo stato delle strade è una stima dalla pioggia prevista. Il radar mostra la previsione, non la pioggia in tempo reale. Controlla sempre il bollettino prima di uscire.</p>
+  <p class="foot">Previsioni: <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a> (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>), lette a ogni apertura. Allerte: <a href="https://www.meteoalarm.org" target="_blank" rel="noopener">Meteoalarm</a> (Aeronautica Militare), non sono gli avvisi della Protezione Civile. Giri: le tue attività Strava nelle Marche, senza il primo e l'ultimo km. Il consiglio sceglie da solo orario e giro: per ogni giro il meteo è letto ogni 10 km circa, ora per ora, e conta il punto peggiore; il rientro deve essere prima del tramonto. Lo stato delle strade è una stima dalla pioggia prevista. Il radar mostra la previsione, non la pioggia in tempo reale. Controlla sempre il bollettino prima di uscire.</p>
 </div>
 <script>
 (function(){
@@ -273,7 +273,7 @@ details.card[open]>summary::after{transform:rotate(225deg);margin-bottom:-4px}
      SER[i]: serie oraria del punto SPTS[i], con ICON-2I (2 km) per i giorni che copre e il miglior modello per il resto; probabilità di pioggia dal miglior modello.
      MP[località][AAAA-MM-GG] = {m:{c,t,p,mm,w,road}, a:{...}} per l'elenco e il riquadro delle località. */
   var MP={},SER=[],SPTS=[],SRC={},NC=0,WXAT=null,FC={loading:true,err:false,cached:false};
-  /* Giri da Strava (routes.json): tracce semplificate e punti meteo lungo i percorsi (CELLS). */
+  /* Giri da Strava (routes.json): tracce (polilinea codificata, senza il primo e l'ultimo km) e punti meteo lungo i percorsi (CELLS). */
   var ROUTES=null,RLOAD=true,CELLS=[],RP=null,LASTDAYS=[];
   /* RST.max: km massimi scelti col cursore. EV: valutazioni già calcolate (svuotata quando cambia il meteo) */
   var RST={max:60},EV={};
@@ -413,9 +413,16 @@ details.card[open]>summary::after{transform:rotate(225deg);margin-bottom:-4px}
       setSeries(c.pts.map(function(p){return {la:p[0],lo:p[1]}}),ser,c.src||{},days,c.nc||0);WXAT=c.at;FC.cached=true;
     }catch(e){}
   }
+  /* polilinea codificata (formato Google, 5 decimali) -> [[lat,lon],...] */
+  function decLine(s){
+    var pts=[],i=0,la=0,lo=0;
+    while(i<s.length){for(var k=0;k<2;k++){var sh=0,r=0,b;do{b=s.charCodeAt(i++)-63;r|=(b&31)<<sh;sh+=5}while(b>=32);var v=r&1?~(r>>1):r>>1;if(k)lo+=v;else la+=v}pts.push([la/1e5,lo/1e5])}
+    return pts;
+  }
   function loadRoutes(){
     return getJSON('routes.json').then(function(j){
       if(!j||!Array.isArray(j.routes)||!Array.isArray(j.cells))throw new Error('giri');
+      j.routes.forEach(function(r){if(!r.pts&&r.line)r.pts=decLine(r.line)});
       ROUTES=j;CELLS=j.cells.map(function(c,i){return {n:'c'+i,la:c[0],lo:c[1]}});
       if(NC&&!cellsMatch()){NC=0;EV={}}
     }).catch(function(){ROUTES=null}).then(function(){RLOAD=false;loadWx()});

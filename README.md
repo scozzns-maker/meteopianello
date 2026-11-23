@@ -20,7 +20,7 @@ File:
 - `index.html`: la pagina.
 - `alerts.json`: allerte Meteoalarm per le Marche, scritte da GitHub Actions.
 - `.github/scripts/allerte.py`: lo script che legge Meteoalarm (solo libreria standard di Python).
-- `routes.json`: i giri Strava, con tracce semplificate e senza il primo e l'ultimo tratto (da 1 a 2 km, per non mostrare da dove si parte); niente titoli, link né identificativi delle attività.
+- `routes.json`: i giri Strava, con le tracce quasi complete (un punto ogni 150 m circa, come le dà Strava) ma senza il primo e l'ultimo km, per non mostrare da dove si parte; niente titoli, link né identificativi delle attività.
 - `tools/giri.py`: rigenera `routes.json` da un elenco di attività Strava. I giri nuovi non entrano da soli: per aggiungerli va rilanciato con le attività aggiornate.
 - `logo.jpg`: il logo.
 
