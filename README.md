@@ -5,7 +5,7 @@ Non ci sono scuse. Quando e dove fare un giro in bici nel weekend nelle Marche, 
 - **Consiglio del giorno**: per sabato e domenica la pagina sceglie da sola l'orario migliore (es. 10:00–13:20) e il giro migliore tra quelli fatti nelle Marche (da Strava). La partenza è dopo l'alba e il rientro prima del tramonto; la durata è quella del giro su Strava più il 15% per le soste. Se i giri non si caricano, consiglia la località migliore per un'uscita di 3 ore.
 - **Quanti km vuoi fare**: un cursore (la bici) imposta i km massimi; a meteo pari vince il giro più vicino ai km scelti.
 - **Meteo lungo il percorso**: letto ogni 10 km circa su ogni giro, ora per ora; conta il punto peggiore (pioggia, strade asciutte/umide/bagnate, ghiaccio, vento, freddo).
-- **Radar**: mappa (OpenStreetMap/CARTO) con la pioggia prevista ora per ora (da azzurro a rosso), il vento come scie in movimento e il tempo con temperatura in venti località, da Pesaro a San Benedetto. Si scorre con il cursore o si anima con il tasto play, dalle 6 alle 20 di sabato e domenica; l'orario consigliato è segnato in verde e il giro consigliato è disegnato sulla mappa. È una previsione interpolata tra circa 130 punti (località, punti dei giri e una griglia), non il radar in tempo reale.
+- **Radar**: mappa con la pioggia prevista ora per ora (da azzurro a rosso), il vento come scie in movimento e il tempo con temperatura in venti località, da Pesaro a San Benedetto. Si scorre con il cursore o si anima con il tasto play, dalle 6 alle 20 di sabato e domenica; l'orario consigliato è segnato in verde e il giro consigliato è disegnato sulla mappa. È una previsione interpolata tra circa 130 punti (località, punti dei giri e una griglia), non il radar in tempo reale.
 - **Tema** chiaro o scuro, con il pulsante in alto a destra (all'inizio segue quello del dispositivo).
 
 Pagina: https://scozzns-maker.github.io/meteopianello/
@@ -24,6 +24,6 @@ File:
 - `tools/giri.py`: rigenera `routes.json` da un elenco di attività Strava. I giri nuovi non entrano da soli: per aggiungerli va rilanciato con le attività aggiornate.
 - `logo.jpg`: il logo.
 
-Mappa di base: © [OpenStreetMap](https://www.openstreetmap.org/copyright), © [CARTO](https://carto.com/attributions).
+Mappa di base: disegnata nella pagina (terra, mare e costa). Si può usare lo sfondo CARTO (© OpenStreetMap, © CARTO) mettendo in `CARTO_KEY`, dentro `index.html`, una chiave gratuita richiesta su https://carto.com/basemaps/apikey: senza chiave CARTO scrive "API key required" sulla mappa.
 
 Nota: GitHub sospende le azioni programmate dopo 60 giorni senza attività nel repository. I salvataggi periodici di `alerts.json` contano come attività; se l'azione risultasse sospesa, si riattiva da Actions → Allerte Meteoalarm → Enable workflow.
