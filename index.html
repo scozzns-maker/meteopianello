@@ -117,7 +117,12 @@ h2{font-size:18px;font-weight:800;letter-spacing:-.01em}
 .radar>*{position:absolute}
 .rbase,.rtiles,.rcv,.rroute,.rpts{inset:0;width:100%;height:100%}
 .rbase .land{fill:var(--land)}.rbase .sea{fill:var(--sea)}.rbase .coast{fill:none;stroke:var(--coast);stroke-width:1.5}
-.rtiles img{position:absolute;max-width:none;pointer-events:none}
+.rtiles img{position:absolute;max-width:none;pointer-events:none;filter:brightness(.88) saturate(.9)}
+[data-theme="dark"] .rtiles img{filter:brightness(.68) saturate(.85)}
+.radar:not(.notiles){--halo:rgba(0,0,0,.78)}
+.radar:not(.notiles) .rlb b{color:#fff}.radar:not(.notiles) .rlb small{color:rgba(255,255,255,.88)}
+.radar:not(.notiles) .rroute .rtc{stroke:rgba(255,255,255,.95)}
+.radar.notiles .rtiles{display:none}
 .rcv,.rroute,.rtiles{pointer-events:none}
 .rroute .rtc{fill:none;stroke:var(--halo);stroke-width:8;stroke-linejoin:round;stroke-linecap:round}
 .rroute .rth{fill:none;stroke:var(--accent);stroke-width:4;stroke-linejoin:round;stroke-linecap:round}
@@ -447,7 +452,7 @@ details.card[open]>summary::after{transform:rotate(225deg);margin-bottom:-4px}
   function dayLong(d){return capz(d.toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long'}))}
   function slotTxt(l,q){return wxIcon(q.c,22)+'<b>'+l+'</b> '+esc(q.c)+', '+q.t+' °C, pioggia '+q.p+'%'+(q.mm>0?' ('+fmt(q.mm,1)+' mm)':'')+', vento '+windTxt(q.w)+(q.road?', '+roadShort(q):'')}
   /* ---------- Radar: pioggia, vento e tempo previsti ora per ora su un'unica mappa ----------
-     Mappa in proiezione di Mercatore (come le tessere CARTO); coordinate logiche 0..GEO.W x 0..GEO.H. */
+     Mappa in proiezione di Mercatore (come le immagini satellitari); coordinate logiche 0..GEO.W x 0..GEO.H. */
   var GEO={lo0:12.6,lo1:14.15,la0:42.86,la1:44.0,W:600};
   function my(la){return Math.log(Math.tan(Math.PI/4+la*Math.PI/360))}
   GEO.k=GEO.W/(GEO.lo1-GEO.lo0)*180/Math.PI;GEO.H=Math.round((my(GEO.la1)-my(GEO.la0))*GEO.k);
@@ -457,7 +462,7 @@ details.card[open]>summary::after{transform:rotate(225deg);margin-bottom:-4px}
   function LA(y){return Math.atan(Math.sinh(my(GEO.la1)-y/GEO.k))*180/Math.PI}
   function pc(v){return (v*100).toFixed(3)+'%'}
   var RH0=6,RH1=20,RMOT=!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches);
-  var RAD={t:0,play:false,sel:null,frames:[],F:{},wsig:'',fsig:'',dom:false,parts:[],raf:0,last:0,vis:true,init:false,dpr:1,
+  var RAD={t:0,play:RMOT,z:0,sel:null,frames:[],F:{},wsig:'',fsig:'',dom:false,parts:[],raf:0,last:0,vis:true,init:false,dpr:1,
     GW:110,WW:22,fi:-1,di:-1};
   RAD.GH=Math.round(RAD.GW*GEO.H/GEO.W);RAD.WH=Math.round(RAD.WW*GEO.H/GEO.W);
   /* colori della pioggia (mm/h): da azzurro a rosso, come i radar */
@@ -524,7 +529,7 @@ details.card[open]>summary::after{transform:rotate(225deg);margin-bottom:-4px}
   var TRAIL=22;
   function stepParticles(dt){
     var cv=$('rwind');if(!cv||!RAD.frames.length)return;
-    var ctx=cv.getContext('2d'),sc=cv.width/GEO.W,C=cur(),K=0.06*dt*60,dark=isDark(),P=[[],[],[]],Q=[[],[],[]];
+    var ctx=cv.getContext('2d'),sc=cv.width/GEO.W,C=cur(),K=0.06*dt*60,dark=isDark()||onSat(),P=[[],[],[]],Q=[[],[],[]];
     ctx.clearRect(0,0,cv.width,cv.height);
     for(var i=0;i<RAD.parts.length;i++){
       var p=RAD.parts[i],h=p.h;
@@ -535,13 +540,13 @@ details.card[open]>summary::after{transform:rotate(225deg);margin-bottom:-4px}
     }
     ctx.lineCap='round';
     var draw=function(arr,rgb,al,lw){arr.forEach(function(a,b){if(!a.length)return;ctx.beginPath();for(var q=0;q<a.length;q+=4){ctx.moveTo(a[q],a[q+1]);ctx.lineTo(a[q+2],a[q+3])}ctx.strokeStyle='rgba('+rgb+','+al[b]+')';ctx.lineWidth=lw*RAD.dpr;ctx.stroke()})};
-    draw(P,dark?'230,238,250':'25,45,75',dark?[0.12,0.3,0.62]:[0.1,0.26,0.5],1.25);
+    draw(P,dark?'240,246,255':'25,45,75',dark?[0.14,0.34,0.7]:[0.1,0.26,0.5],1.25);
     draw(Q,dark?'255,170,70':'232,113,10',[0.18,0.45,0.85],1.6);
   }
   /* senza animazioni (riduci movimento): frecce ferme */
   function drawArrows(){
     var cv=$('rwind');if(!cv||!RAD.frames.length)return;
-    var ctx=cv.getContext('2d'),sc=cv.width/GEO.W,C=cur(),dark=isDark();ctx.clearRect(0,0,cv.width,cv.height);
+    var ctx=cv.getContext('2d'),sc=cv.width/GEO.W,C=cur(),dark=isDark()||onSat();ctx.clearRect(0,0,cv.width,cv.height);
     ctx.strokeStyle=ctx.fillStyle=dark?'rgba(236,243,255,.8)':'rgba(12,34,66,.6)';ctx.lineWidth=1.4*RAD.dpr;
     for(var y=30;y<GEO.H;y+=55)for(var x=30;x<GEO.W;x+=55){
       var w=windAt(C,x,y),s=Math.sqrt(w[0]*w[0]+w[1]*w[1]);if(s<2)continue;
@@ -554,28 +559,31 @@ details.card[open]>summary::after{transform:rotate(225deg);margin-bottom:-4px}
     RAD.raf=0;if(!RAD.vis||document.hidden||!RAD.frames.length){RAD.last=0;return}
     var dt=RAD.last?Math.min(0.1,(ts-RAD.last)/1000):1/60;RAD.last=ts;
     if(RAD.play){
-      var f=Math.floor(RAD.t+1e-6),nt=RAD.t+dt*0.75;
-      if(Math.floor(nt)!==f)setT(nt>=RAD.frames.length-1+0.999?0:Math.floor(nt));else{RAD.t=nt;drawRain()}
+      var f=Math.floor(RAD.t+1e-6),nt=RAD.t+dt*1.1;
+      if(Math.floor(nt)!==f){RAD.touched=true;setT(nt>=RAD.frames.length-1+0.999?0:Math.floor(nt))}else{RAD.t=nt;drawRain()}
     }
     if(RMOT)stepParticles(dt);
     RAD.raf=requestAnimationFrame(tick);
   }
   function loop(){if(!RAD.raf&&RAD.vis&&!document.hidden&&(RMOT||RAD.play))RAD.raf=requestAnimationFrame(tick)}
   document.addEventListener('visibilitychange',loop);
-  /* Sfondo con le tessere CARTO solo se c'è una chiave (gratuita, da carto.com/basemaps/apikey): senza chiave CARTO mette la scritta
-     "API key required" sulla mappa, quindi si usa la mappa disegnata qui (terra, mare e costa). */
-  var CARTO_KEY='';
-  function tilesHTML(){
-    if(!CARTO_KEY)return '';
-    var z=10,n=1024,st=isDark()?'dark_nolabels':'light_nolabels',h='';
+  /* Sfondo satellitare: Sentinel-2 cloudless 2024 di EOX (mosaico senza nuvole delle immagini Copernicus, libero per uso non commerciale
+     con attribuzione, senza chiave). Zoom 9 sul telefono, 10 sugli schermi larghi. Se le immagini non arrivano resta la mappa disegnata. */
+  function tilesHTML(z){
+    var n=Math.pow(2,z),h='';
     var tx=function(lo){return Math.floor((lo+180)/360*n)},ty=function(la){return Math.floor((1-my(la)/Math.PI)/2*n)},tl=function(y){return Math.atan(Math.sinh(Math.PI*(1-2*y/n)))*180/Math.PI};
     for(var x=tx(GEO.lo0);x<=tx(GEO.lo1);x++)for(var y=ty(GEO.la1);y<=ty(GEO.la0);y++){
       var L=PX(x/n*360-180),R=PX((x+1)/n*360-180),T=PY(tl(y)),B=PY(tl(y+1));
-      h+='<img src="https://basemaps.cartocdn.com/rastertiles/'+st+'/'+z+'/'+x+'/'+y+'.png?key='+encodeURIComponent(CARTO_KEY)+'" alt="" draggable="false" decoding="async" style="left:'+pc(L/GEO.W)+';top:'+pc(T/GEO.H)+';width:'+pc((R-L)/GEO.W+0.0008)+';height:'+pc((B-T)/GEO.H+0.0008)+'">';
+      h+='<img src="https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2024_3857/default/g/'+z+'/'+y+'/'+x+'.jpg" alt="" draggable="false" decoding="async" style="left:'+pc(L/GEO.W)+';top:'+pc(T/GEO.H)+';width:'+pc((R-L)/GEO.W+0.0008)+';height:'+pc((B-T)/GEO.H+0.0008)+'">';
     }
     return h;
   }
-  function radarTheme(){if(!RAD.dom)return;$('rtiles').innerHTML=tilesHTML();var c=$('rwind');if(c)c.getContext('2d').clearRect(0,0,c.width,c.height);if(!RMOT)drawArrows()}
+  function setTiles(z){
+    if(RAD.z===z)return;RAD.z=z;RAD.terr=0;
+    var t=$('rtiles');t.innerHTML=tilesHTML(z);RAD.tn=t.children.length;$('radar').classList.remove('notiles');
+  }
+  function radarTheme(){if(!RAD.dom)return;var c=$('rwind');if(c)c.getContext('2d').clearRect(0,0,c.width,c.height);if(!RMOT)drawArrows()}
+  function onSat(){var r=$('radar');return !!r&&!r.classList.contains('notiles')}
   var ICPLAY='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></svg>',ICPAUSE='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor"/></svg>';
   var ICRISE='<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" class="sico"><path d="M2 19h20M5.2 13.2l1.6 1.2M18.8 13.2l-1.6 1.2"/><path class="sund" d="M7 19a5 5 0 0 1 10 0z"/><path d="M12 10V3.5M9.2 6.2L12 3.5l2.8 2.7"/></svg>',
       ICSET='<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" class="sico"><path d="M2 19h20M5.2 13.2l1.6 1.2M18.8 13.2l-1.6 1.2"/><path class="sund" d="M7 19a5 5 0 0 1 10 0z"/><path d="M12 3.5V10M9.2 7.3L12 10l2.8-2.7"/></svg>';
@@ -584,7 +592,7 @@ details.card[open]>summary::after{transform:rotate(225deg);margin-bottom:-4px}
     $('wxmap').innerHTML='<div class="rhead"><h2>Radar</h2><p class="rsub" id="rcap"></p></div><div class="ralw" id="ralw"></div>'+
       '<div class="radar" id="radar" style="aspect-ratio:'+GEO.W+'/'+GEO.H+'">'+
         '<svg class="rbase" viewBox="0 0 '+GEO.W+' '+GEO.H+'" preserveAspectRatio="none" aria-hidden="true"><rect class="land" width="'+GEO.W+'" height="'+GEO.H+'"/><polygon class="sea" points="'+coast+' '+(GEO.W+20)+','+(GEO.H+20)+' '+(GEO.W+20)+',-20"/><polyline class="coast" points="'+coast+'" vector-effect="non-scaling-stroke"/></svg>'+
-        '<div class="rtiles" id="rtiles" aria-hidden="true">'+tilesHTML()+'</div>'+
+        '<div class="rtiles" id="rtiles" aria-hidden="true"></div>'+
         '<canvas class="rcv" id="rrain" aria-hidden="true"></canvas>'+
         '<svg class="rroute" id="rroute" viewBox="0 0 '+GEO.W+' '+GEO.H+'" preserveAspectRatio="none" aria-hidden="true"></svg>'+
         '<canvas class="rcv" id="rwind" aria-hidden="true"></canvas>'+
@@ -595,10 +603,11 @@ details.card[open]>summary::after{transform:rotate(225deg);margin-bottom:-4px}
       '<div class="rctl"><button type="button" class="rplay" id="rplay" aria-label="Avvia l\'animazione">'+ICPLAY+'</button>'+
         '<div class="rsl"><p class="rnow" id="rtime" aria-live="polite"></p><input type="range" id="rt" min="0" max="0" step="1" value="0" aria-label="Ora mostrata sul radar"><div class="rdays" id="rdays"></div></div></div>'+
       '<div class="rleg"><span>Pioggia <i class="rbar"></i>da debole a forte</span><span><i class="rwl"></i>Scie: il vento, più corrono più è forte; arancioni oltre 30 km/h</span><span class="rbl"><i class="rbd"></i>Orario consigliato</span></div>'+
-      '<p class="rattr">'+(CARTO_KEY?'Mappa © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>, © <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>. ':'Mappa schematica: la costa è disegnata in modo approssimativo. ')+'Pioggia e vento interpolati tra i punti di previsione: è una previsione, non il radar in tempo reale.</p>';
+      '<p class="rattr">Immagine satellitare: <a href="https://s2maps.eu" target="_blank" rel="noopener">Sentinel-2 cloudless - https://s2maps.eu</a> by <a href="https://eox.at" target="_blank" rel="noopener">EOX IT Services GmbH</a> (Contains modified Copernicus Sentinel data 2024). Pioggia e vento interpolati tra i punti di previsione: è una previsione, non il radar in tempo reale.</p>';
     RAD.dom=true;RAD.fi=-1;RAD.di=-1;
     RAD.oc=document.createElement('canvas');RAD.oc.width=RAD.GW;RAD.oc.height=RAD.GH;RAD.octx=RAD.oc.getContext('2d');RAD.img=RAD.octx.createImageData(RAD.GW,RAD.GH);
     var el=$('radar');
+    $('rtiles').addEventListener('error',function(){if(++RAD.terr*2>RAD.tn){el.classList.add('notiles');radarTheme()}},true);
     if(window.ResizeObserver)new ResizeObserver(function(){radarSize()}).observe(el);else window.addEventListener('resize',radarSize);
     if(window.IntersectionObserver)new IntersectionObserver(function(es){RAD.vis=es[0].isIntersecting;loop()}).observe(el);
     $('rt').addEventListener('input',function(){RAD.play=false;RAD.touched=true;playBtn();setT(+this.value)});
@@ -608,13 +617,14 @@ details.card[open]>summary::after{transform:rotate(225deg);margin-bottom:-4px}
     $('ralw').addEventListener('click',function(e){if(e.target.closest('button')){RAD.sel=RAD.sel==='__alert'?null:'__alert';overlay(true)}});
     $('rpop').addEventListener('click',function(e){if(e.target.closest('.popx')){RAD.sel=null;overlay(true)}});
     document.addEventListener('keydown',function(e){if(e.key==='Escape'&&RAD.sel){RAD.sel=null;overlay(true)}});
-    radarSize();
+    radarSize();playBtn();
   }
   function playBtn(){var b=$('rplay');if(!b)return;b.innerHTML=RAD.play?ICPAUSE:ICPLAY;b.setAttribute('aria-label',RAD.play?'Ferma l\'animazione':'Avvia l\'animazione')}
   function radarSize(){
     var el=$('radar');if(!el)return;var r=el.getBoundingClientRect();if(!r.width)return;
     /* al massimo 1,5 pixel per punto: basta per le scie e pesa meno sulla batteria */
     RAD.dpr=Math.min(1.5,window.devicePixelRatio||1);RAD.cssW=r.width;RAD.cssH=r.height;
+    setTiles(r.width>=560?10:9);
     ['rrain','rwind'].forEach(function(id){var c=$(id);c.width=Math.round(r.width*RAD.dpr);c.height=Math.round(r.height*RAD.dpr)});
     if(!RAD.frames.length)return;
     initParticles();drawRain();if(!RMOT)drawArrows();loop();
