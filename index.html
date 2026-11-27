@@ -20,7 +20,7 @@ document.documentElement.setAttribute('data-theme',t)})();
 :root{
   --bg:#f2f4f8;--surface:#fff;--surface2:#f5f7fa;--ink:#0f1720;--ink2:#465261;--muted:#768392;--hair:rgba(15,23,32,.1);
   --accent:#1668e3;--accent-ink:#fff;--track:#dfe4ea;
-  --good:#12924a;--good-bg:#e4f6eb;--warn-t:#8a5a00;--warn-bg:#fdf1d3;--crit:#c9302f;--crit-bg:#fde8e7;
+  --good:#12924a;--good-bg:#e4f6eb;--orange-t:#9a4a00;--orange-bg:#ffe5cc;--warn-t:#8a5a00;--warn-bg:#fdf1d3;--crit:#c9302f;--crit-bg:#fde8e7;
   --sea:#d3dbe4;--coast:#a9b6c4;--land:#f3f1ec;--halo:rgba(255,255,255,.95);--glass:rgba(255,255,255,.92);--band:rgba(18,146,74,.55);--moon:#a8935a;--sun:#f2a31b;--cloud:#9ba8b5;--cloud-d:#6f7c8a;--rain:#2b7de0;--snow:#6fb2ee;
   --shadow:0 1px 2px rgba(15,23,32,.05),0 8px 24px rgba(15,23,32,.06);
   --bike:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 30' fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Cg stroke='%230f1720' stroke-width='2.2'%3E%3Ccircle cx='10' cy='20' r='8.5'/%3E%3Ccircle cx='38' cy='20' r='8.5'/%3E%3C/g%3E%3Cpath stroke='%231668e3' stroke-width='2.4' d='M10 20l6.5-11.5h14L21.5 20H10M16 6l5.5 14M30.5 8.5L38 20'/%3E%3Cpath stroke='%230f1720' stroke-width='2.4' d='M13 5.5h7M30.5 8.5l-1-4.5h4.5c2.6 0 3.6 3.8.6 4.6'/%3E%3C/svg%3E");
@@ -29,7 +29,7 @@ document.documentElement.setAttribute('data-theme',t)})();
 :root[data-theme="dark"]{
   --bg:#0a0e13;--surface:#141a22;--surface2:#1b232d;--ink:#eef2f6;--ink2:#b3beca;--muted:#8592a0;--hair:rgba(255,255,255,.11);
   --accent:#5aa2ff;--accent-ink:#06101c;--track:#2a333e;
-  --good:#3fd07a;--good-bg:#12301f;--warn-t:#f5bd4a;--warn-bg:#33270c;--crit:#ff7673;--crit-bg:#3a1717;
+  --good:#3fd07a;--good-bg:#12301f;--orange-t:#ffb066;--orange-bg:#3a2210;--warn-t:#f5bd4a;--warn-bg:#33270c;--crit:#ff7673;--crit-bg:#3a1717;
   --sea:#101820;--coast:#34404d;--land:#22262c;--halo:rgba(10,14,19,.92);--glass:rgba(20,26,34,.9);--band:rgba(63,208,122,.6);--moon:#e8dca8;--sun:#ffc54d;--cloud:#93a0ae;--cloud-d:#6d7a88;--rain:#5aa2ff;--snow:#a5d3ff;
   --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
   --bike:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 30' fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Cg stroke='%23eef2f6' stroke-width='2.2'%3E%3Ccircle cx='10' cy='20' r='8.5'/%3E%3Ccircle cx='38' cy='20' r='8.5'/%3E%3C/g%3E%3Cpath stroke='%235aa2ff' stroke-width='2.4' d='M10 20l6.5-11.5h14L21.5 20H10M16 6l5.5 14M30.5 8.5L38 20'/%3E%3Cpath stroke='%23eef2f6' stroke-width='2.4' d='M13 5.5h7M30.5 8.5l-1-4.5h4.5c2.6 0 3.6 3.8.6 4.6'/%3E%3C/svg%3E");
@@ -45,9 +45,9 @@ button{font:inherit;color:inherit;cursor:pointer}
 a{color:inherit;text-underline-offset:2px}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .wrap{max-width:920px;margin:0 auto;padding:max(18px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 56px max(16px,env(safe-area-inset-left,0px));display:grid;gap:18px}
-.top{display:flex;align-items:center;gap:14px}
+header.top{display:flex;align-items:center;gap:14px}
 .logo{width:56px;height:56px;border-radius:18px;object-fit:cover;flex:none;box-shadow:var(--shadow)}
-.top>div{min-width:0;flex:1}
+header.top>div{min-width:0;flex:1}
 .eyebrow{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
 h1{font-size:26px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
 .goal{font-size:14px;font-weight:700;color:var(--ink2)}
@@ -158,8 +158,23 @@ h2{font-size:18px;font-weight:800;letter-spacing:-.01em}
 .rsun span{display:flex;align-items:center;gap:6px}
 .sico{fill:none;stroke:var(--sun);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.sico .sund{fill:var(--sun)}
 .ralw:empty{display:none}
-.ralw{margin:-4px 0 10px}
-.ralert{border:0;border-radius:12px;padding:7px 12px;font-size:13.5px;font-weight:800;color:var(--warn-t);background:var(--warn-bg)}
+.ralw{margin:-2px 0 12px}
+.ralert{width:100%;display:flex;align-items:center;gap:10px;text-align:left;border:0;border-radius:14px;padding:9px 12px;color:var(--warn-t);background:var(--warn-bg)}
+.ralert.arancione{color:var(--orange-t);background:var(--orange-bg)}.ralert.rossa{color:var(--crit);background:var(--crit-bg)}
+.ali{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:16px;color:#1b1400;background:#f5c518}
+.ralert.arancione .ali{background:#f08a1c;color:#fff}.ralert.rossa .ali{background:#d93030;color:#fff}
+.alt2{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.25}
+.alt2 b{font-size:14px;font-weight:800}
+.alt2 small{font-size:12px;font-weight:600;opacity:.85}
+.alc{flex:none;width:9px;height:9px;border-right:2.5px solid currentColor;border-bottom:2.5px solid currentColor;transform:rotate(45deg);margin:0 4px 4px}
+.ralert[aria-expanded="true"] .alc{transform:rotate(225deg);margin-bottom:-4px}
+.ralist{margin-top:8px;background:var(--surface2);border-radius:14px;padding:10px 12px}
+.ralist ul{display:grid;gap:9px}
+.ralist li{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.35}
+.ralist small{color:var(--ink2);font-size:12.5px}
+.alv{flex:none;min-width:74px;text-align:center;border-radius:999px;padding:2px 8px;font-size:12px;font-weight:800;background:#f5c518;color:#1b1400}
+.alv.arancione{background:#f08a1c;color:#fff}.alv.rossa{background:#d93030;color:#fff}
+.ralist p{margin-top:10px;font-size:12px;color:var(--muted);line-height:1.45}
 #rpop{inset:0;pointer-events:none}
 #rpop .mappop{pointer-events:auto}
 .rctl{display:flex;align-items:center;gap:14px;margin-top:12px}
@@ -183,7 +198,7 @@ h2{font-size:18px;font-weight:800;letter-spacing:-.01em}
 .rattr{font-size:11.5px;color:var(--muted);margin-top:8px}
 
 .mappop{position:absolute;left:10px;right:10px;max-height:calc(100% - 20px);overflow:auto;background:var(--surface);border:1px solid var(--hair);border-radius:16px;padding:12px 44px 12px 14px;box-shadow:0 10px 30px rgba(0,0,0,.28);z-index:5}
-.mappop.top{top:10px}.mappop.bot{bottom:10px}
+.mappop.at-top{top:10px}.mappop.at-bot{bottom:10px}
 .mappop h3{font-size:17px;font-weight:800}
 .mappop p{margin-top:6px;color:var(--ink2);font-size:13.5px;line-height:1.45}
 .mappop b{color:var(--ink)}
@@ -442,7 +457,7 @@ details.card[open]>summary::after{transform:rotate(225deg);margin-bottom:-4px}
       ALERTS=(Array.isArray(j.alerts)?j.alerts:[]).filter(function(a){return String(a.geo).toUpperCase()==='IT011'}).map(function(a){
         var ev=String(a.event||'').toLowerCase(),k=AKIND.filter(function(x){return x[0].test(ev)})[0],lv=/red/.test(ev)?'rossa':/orange/.test(ev)?'arancione':'gialla';
         var s=Date.parse(a.onset),e=Date.parse(a.expires);
-        return {t:'Allerta '+lv+' per '+(k?k[1]:'fenomeni intensi'),lv:lv,area:a.zone?String(a.zone).toLowerCase():'Marche',s:s,e:e,fino:finoTxt(e)};
+        return {t:'Allerta '+lv+' per '+(k?k[1]:'fenomeni intensi'),k:k?k[1]:'fenomeni intensi',lv:lv,area:a.zone?String(a.zone).toLowerCase():'Marche',s:s,e:e,fino:finoTxt(e)};
       }).filter(function(a){return isFinite(a.s)&&isFinite(a.e)});
       AL.ok=true;AL.latest=Date.parse(j.latestSent)||0;AL.checked=Date.parse(j.checkedAt)||0;
     }).catch(function(){AL.ok=false}).then(function(){loadWx()});
@@ -692,7 +707,7 @@ details.card[open]>summary::after{transform:rotate(225deg);margin-bottom:-4px}
     $('rplay').addEventListener('click',function(){RAD.play=!RAD.play;RAD.touched=true;if(RAD.play&&RAD.t>=RAD.frames.length-1)setT(0);playBtn();RAD.last=0;loop()});
     $('rdays').addEventListener('click',function(e){var b=e.target.closest('button[data-rd]');if(!b)return;var di=+b.getAttribute('data-rd'),bb=LASTDAYS[di]&&dayBest(LASTDAYS[di]);radarJump(di,bb?bb.s:9)});
     $('rpts').addEventListener('click',function(e){var b=e.target.closest('[data-n]');if(!b)return;RAD.sel=RAD.sel===b.getAttribute('data-n')?null:b.getAttribute('data-n');overlay(true)});
-    $('ralw').addEventListener('click',function(e){if(e.target.closest('button')){RAD.sel=RAD.sel==='__alert'?null:'__alert';overlay(true)}});
+    $('ralw').addEventListener('click',function(e){if(e.target.closest('.ralert')){RAD.alOpen=!RAD.alOpen;var fr=RAD.frames[Math.floor(RAD.t+1e-6)];if(fr)renderAlerts(fr.dy)}});
     $('rpop').addEventListener('click',function(e){if(e.target.closest('.popx')){RAD.sel=null;overlay(true)}});
     document.addEventListener('keydown',function(e){if(e.key==='Escape'&&RAD.sel){RAD.sel=null;overlay(true)}});
     radarSize();playBtn();
@@ -790,7 +805,7 @@ details.card[open]>summary::after{transform:rotate(225deg);margin-bottom:-4px}
       $('rsun').innerHTML='<span>'+ICRISE+hmTxt(sunH(dy,true))+'</span><span>'+ICSET+hmTxt(sunH(dy,false))+'</span>';
       $('rsun').setAttribute('aria-label','Alba alle '+hmTxt(sunH(dy,true))+', tramonto alle '+hmTxt(sunH(dy,false)));
       var al=dayAlerts(dy);
-      $('ralw').innerHTML=al.length?'<button type="button" class="ralert"><span aria-hidden="true">⚠</span> '+(al.length===1?esc(al[0].t):al.length+' allerte meteo')+'</button>':'';
+      renderAlerts(dy);
       var svg=$('rroute');
       if(b&&b.rt){var P=b.rt.pts.map(function(p){return PX(p[1]).toFixed(1)+','+PY(p[0]).toFixed(1)}).join(' ');
         svg.innerHTML='<polyline class="rtc" points="'+P+'" vector-effect="non-scaling-stroke"/><polyline class="rth" points="'+P+'" vector-effect="non-scaling-stroke"/>'}
@@ -799,15 +814,23 @@ details.card[open]>summary::after{transform:rotate(225deg);margin-bottom:-4px}
       $('rdays').querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed',+x.getAttribute('data-rd')===fr.di?'true':'false')});
     }
     var pop=$('rpop'),sel=RAD.sel,det='';
-    if(sel==='__alert'){var aa=dayAlerts(dy);det=aa.length?'<h3>Allerte meteo</h3><p><b>'+esc(dayLong(dy))+'</b></p>'+aa.map(function(x){return '<p><b>'+esc(x.t)+'</b>, '+esc(x.area)+', fino a '+esc(x.fino)+'.</p>'}).join('')+'<p>'+alertNote(aa)+'</p>':''}
-    else if(sel){
+    if(sel){
       var i=PLACES.map(function(p){return p.n}).indexOf(sel),q=i>=0?ptNow(i,fr):null,xx=MP[sel]&&MP[sel][fr.key];
       det='<h3>'+esc(sel)+'</h3>'+(q?'<p>'+wxIcon(q.c,22,null,null,fr.night)+'<b>'+esc(capz(dy.toLocaleDateString('it-IT',{weekday:'long'})))+' alle '+fr.h+':00</b> '+esc(q.c)+', '+q.t+' °C'+(q.p!=null?', pioggia '+q.p+'%':'')+(q.mm>0?' ('+fmt(q.mm,1)+' mm)':'')+', vento '+windTxt(q.w)+'</p>':'')+
         (xx?'<p>'+slotTxt('Mattina',xx.m)+'</p><p>'+slotTxt('Pomeriggio',xx.a)+'</p>':'');
     }
-    if(det){var py=sel==='__alert'?1:(PLACES.filter(function(p){return p.n===sel})[0]||{la:44}).la<43.43?0:1;
-      pop.innerHTML='<div class="mappop '+(py?'top':'bot')+'" role="dialog" aria-label="Dettaglio meteo"><button type="button" class="popx" aria-label="Chiudi">×</button>'+det+'</div>'}
+    /* il riquadro va dalla parte opposta alla località: in alto per quelle del sud, in basso per quelle del nord */
+    if(det){var py=(PLACES.filter(function(p){return p.n===sel})[0]||{la:44}).la<43.43?1:0;
+      pop.innerHTML='<div class="mappop '+(py?'at-top':'at-bot')+'" role="dialog" aria-label="Dettaglio meteo"><button type="button" class="popx" aria-label="Chiudi">×</button>'+det+'</div>'}
     else pop.innerHTML='';
+  }
+  function renderAlerts(dy){
+    var box=$('ralw'),al=dayAlerts(dy);if(!box)return;
+    if(!al.length){box.innerHTML='';return}
+    var lv=alertTop(al),day=capz(dy.toLocaleDateString('it-IT',{weekday:'long'}));
+    al=al.slice().sort(function(a,b){return LVR[b.lv]-LVR[a.lv]||a.s-b.s});
+    box.innerHTML='<button type="button" class="ralert '+lv+'" aria-expanded="'+(RAD.alOpen?'true':'false')+'" aria-controls="ralist"><span class="ali" aria-hidden="true">!</span><span class="alt2"><b>'+esc(alertSum(al))+'</b><small>'+esc(day)+' · '+(RAD.alOpen?'nascondi i dettagli':'tocca per i dettagli')+'</small></span><span class="alc" aria-hidden="true"></span></button>'+
+      (RAD.alOpen?'<div class="ralist" id="ralist"><ul>'+al.map(function(x){return '<li><span class="alv '+x.lv+'">'+capz(x.lv)+'</span><span><b>'+esc(capz(x.k))+'</b> · '+esc(areaTxt(x.area))+'<br><small>'+esc(day)+', '+esc(alertSpan(x,dy))+'</small></span></li>'}).join('')+'</ul><p>'+alertNote(al)+'</p></div>':'');
   }
   function renderRadar(days){
     var box=$('wxmap');
@@ -830,6 +853,21 @@ details.card[open]>summary::after{transform:rotate(225deg);margin-bottom:-4px}
     $('rt').style.setProperty('--bands',bandCSS());
     setT(RAD.t);overlay(true);loop();
   }
+  var LVR={gialla:1,arancione:2,rossa:3};
+  function joinIt(a){return a.length<2?a.join(''):a.slice(0,-1).join(', ')+' e '+a[a.length-1]}
+  /* "Allerta arancione per vento, gialla per pioggia e temporali": livelli dal più alto, fenomeni senza ripetizioni */
+  function alertSum(al){
+    var by={};al.forEach(function(x){(by[x.lv]=by[x.lv]||[]);if(by[x.lv].indexOf(x.k)<0)by[x.lv].push(x.k)});
+    return 'Allerta '+Object.keys(by).sort(function(a,b){return LVR[b]-LVR[a]}).map(function(l){return l+' per '+joinIt(by[l])}).join(', ');
+  }
+  function alertTop(al){return al.reduce(function(m,x){return LVR[x.lv]>LVR[m]?x.lv:m},'gialla')}
+  /* orario di un'allerta dentro il giorno mostrato */
+  function alertSpan(x,dy){
+    var a=new Date(dy.getFullYear(),dy.getMonth(),dy.getDate()).getTime(),b=a+864e5,hm=function(t){var r=romeParts(new Date(t+6e4));return r.hour+':'+pad(r.minute<30?0:30)};
+    var fromStart=x.s<=a,toEnd=x.e>=b-61e3;
+    return fromStart&&toEnd?'tutto il giorno':fromStart?'fino alle '+hm(x.e):toEnd?'dalle '+hm(x.s):'dalle '+hm(x.s)+' alle '+hm(x.e);
+  }
+  function areaTxt(a){return !a||a==='marche'||a==='Marche'?'tutte le Marche':capz(a)}
   function alertNote(aa){
     var hi=aa.some(function(x){return x.lv==='rossa'})?'Livello rosso: fenomeni molto intensi, evita di uscire.':aa.some(function(x){return x.lv==='arancione'})?'Livello arancione: fenomeni intensi, pericolosi per chi è in strada.':'Livello giallo: fenomeni di moderata intensità, possibili disagi minori per le attività all\'aperto.';
     return 'Fonte: <a href="https://www.meteoalarm.org" target="_blank" rel="noopener">Meteoalarm</a>, Servizio Meteorologico dell\'Aeronautica Militare'+(AL.latest?', bollettino '+whenTxt(new Date(AL.latest)):'')+'. '+hi;
@@ -904,7 +942,7 @@ details.card[open]>summary::after{transform:rotate(225deg);margin-bottom:-4px}
   function chips(q){var lv=(q.road||{lv:'asciutte'}).lv;return '<ul class="chips"><li>Strade <span class="road '+lv+'">'+lv+'</span></li><li>'+tRange(q)+'</li><li>Pioggia '+q.p+'%'+(q.mm>0?' ('+fmt(q.mm,1)+' mm)':'')+'</li><li>Vento '+windTxt(q.w)+'</li></ul>'}
   function warnTxt(dy,q,dark){
     var w=[],r=q.road||{lv:'asciutte',ice:0},al=dayAlerts(dy);
-    if(al.length)w.push(al.map(function(x){return x.t}).join(', ')+(al.some(function(x){return x.lv!=='gialla'})?': valuta di non uscire.':'.'));
+    if(al.length)w.push(alertSum(al)+(al.some(function(x){return x.lv!=='gialla'})?': valuta di non uscire.':' (Meteoalarm).'));
     if(r.lv!=='asciutte')w.push((r.part?'Su parte del percorso: '+roadWhy(r):capz(roadWhy(r)))+'.');
     if(r.ice)w.push(capz(iceTxt(r))+'.');
     if(dark)w.push('Il sole tramonta alle '+hmTxt(dark)+': rientreresti col buio, servono le luci.');
